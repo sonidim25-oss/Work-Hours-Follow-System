@@ -1,0 +1,38 @@
+# Work Hours Follow — Design Kit
+
+## Contents
+
+```text
+Design/
+├── DESIGN_SYSTEM.md
+├── SCREEN_SPECS.md
+├── COMPONENTS.md
+├── IMPLEMENTATION_NOTES.md
+├── UI_GUIDELINES.md
+└── References/
+    ├── Design_Board.png
+    ├── 01_Overview.png
+    ├── 02_Entries.png
+    ├── 03_Add_Edit_Entry.png
+    ├── 04_History.png
+    ├── 05_Settings.png
+    ├── 06_Components.png
+    ├── 07_Tokens_Typography.png
+    └── 08_Layout_Icons.png
+```
+
+Place this folder in the repository as:
+
+```text
+Docs/Design/
+```
+
+Recommended root documents:
+
+```text
+PROJECT_DESCRIPTION.md
+RULES.md
+Docs/Design/
+```
+
+Codex should read the project description, project rules, design system, relevant screen specification, and matching image before implementing each screen.
