@@ -9,7 +9,10 @@
 /* Begin PBXBuildFile section */
 		100000000000000000000001 /* WorkHoursFollowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000001 /* WorkHoursFollowApp.swift */; };
 		100000000000000000000002 /* AppTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000002 /* AppTabView.swift */; };
-		100000000000000000000003 /* ProjectSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000003 /* ProjectSmokeTests.swift */; };
+		100000000000000000000004 /* DurationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000006 /* DurationServiceTests.swift */; };
+		100000000000000000000005 /* DurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000007 /* DurationService.swift */; };
+		100000000000000000000006 /* EarningsCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000008 /* EarningsCalculatorTests.swift */; };
+		100000000000000000000007 /* EarningsCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000009 /* EarningsCalculator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,9 +28,12 @@
 /* Begin PBXFileReference section */
 		200000000000000000000001 /* WorkHoursFollowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkHoursFollowApp.swift; sourceTree = "<group>"; };
 		200000000000000000000002 /* AppTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabView.swift; sourceTree = "<group>"; };
-		200000000000000000000003 /* ProjectSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSmokeTests.swift; sourceTree = "<group>"; };
 		200000000000000000000004 /* WorkHoursFollow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorkHoursFollow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		200000000000000000000005 /* WorkHoursFollowTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WorkHoursFollowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		200000000000000000000006 /* DurationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationServiceTests.swift; sourceTree = "<group>"; };
+		200000000000000000000007 /* DurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationService.swift; sourceTree = "<group>"; };
+		200000000000000000000008 /* EarningsCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarningsCalculatorTests.swift; sourceTree = "<group>"; };
+		200000000000000000000009 /* EarningsCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarningsCalculator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +67,7 @@
 			isa = PBXGroup;
 			children = (
 				700000000000000000000003 /* App */,
+				700000000000000000000006 /* Services */,
 			);
 			path = WorkHoursFollow;
 			sourceTree = "<group>";
@@ -77,7 +84,8 @@
 		700000000000000000000004 /* WorkHoursFollowTests */ = {
 			isa = PBXGroup;
 			children = (
-				200000000000000000000003 /* ProjectSmokeTests.swift */,
+				200000000000000000000006 /* DurationServiceTests.swift */,
+				200000000000000000000008 /* EarningsCalculatorTests.swift */,
 			);
 			path = WorkHoursFollowTests;
 			sourceTree = "<group>";
@@ -89,6 +97,15 @@
 				200000000000000000000005 /* WorkHoursFollowTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		700000000000000000000006 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000007 /* DurationService.swift */,
+				200000000000000000000009 /* EarningsCalculator.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -191,6 +208,8 @@
 			files = (
 				100000000000000000000001 /* WorkHoursFollowApp.swift in Sources */,
 				100000000000000000000002 /* AppTabView.swift in Sources */,
+				100000000000000000000005 /* DurationService.swift in Sources */,
+				100000000000000000000007 /* EarningsCalculator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,7 +217,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				100000000000000000000003 /* ProjectSmokeTests.swift in Sources */,
+				100000000000000000000004 /* DurationServiceTests.swift in Sources */,
+				100000000000000000000006 /* EarningsCalculatorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
