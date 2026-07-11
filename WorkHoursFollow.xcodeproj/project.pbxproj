@@ -1,0 +1,360 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		100000000000000000000001 /* WorkHoursFollowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000001 /* WorkHoursFollowApp.swift */; };
+		100000000000000000000002 /* AppTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000002 /* AppTabView.swift */; };
+		100000000000000000000003 /* ProjectSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000003 /* ProjectSmokeTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		300000000000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 400000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 500000000000000000000001;
+			remoteInfo = WorkHoursFollow;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		200000000000000000000001 /* WorkHoursFollowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkHoursFollowApp.swift; sourceTree = "<group>"; };
+		200000000000000000000002 /* AppTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabView.swift; sourceTree = "<group>"; };
+		200000000000000000000003 /* ProjectSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSmokeTests.swift; sourceTree = "<group>"; };
+		200000000000000000000004 /* WorkHoursFollow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorkHoursFollow.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		200000000000000000000005 /* WorkHoursFollowTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WorkHoursFollowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		600000000000000000000006 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		600000000000000000000004 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		700000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				700000000000000000000002 /* WorkHoursFollow */,
+				700000000000000000000004 /* WorkHoursFollowTests */,
+				700000000000000000000005 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		700000000000000000000002 /* WorkHoursFollow */ = {
+			isa = PBXGroup;
+			children = (
+				700000000000000000000003 /* App */,
+			);
+			path = WorkHoursFollow;
+			sourceTree = "<group>";
+		};
+		700000000000000000000003 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000001 /* WorkHoursFollowApp.swift */,
+				200000000000000000000002 /* AppTabView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		700000000000000000000004 /* WorkHoursFollowTests */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000003 /* ProjectSmokeTests.swift */,
+			);
+			path = WorkHoursFollowTests;
+			sourceTree = "<group>";
+		};
+		700000000000000000000005 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000004 /* WorkHoursFollow.app */,
+				200000000000000000000005 /* WorkHoursFollowTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		500000000000000000000001 /* WorkHoursFollow */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 800000000000000000000002 /* Build configuration list for PBXNativeTarget "WorkHoursFollow" */;
+			buildPhases = (
+				600000000000000000000001 /* Sources */,
+				600000000000000000000006 /* Frameworks */,
+				600000000000000000000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WorkHoursFollow;
+			productName = WorkHoursFollow;
+			productReference = 200000000000000000000004 /* WorkHoursFollow.app */;
+			productType = "com.apple.product-type.application";
+		};
+		500000000000000000000002 /* WorkHoursFollowTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 800000000000000000000003 /* Build configuration list for PBXNativeTarget "WorkHoursFollowTests" */;
+			buildPhases = (
+				600000000000000000000003 /* Sources */,
+				600000000000000000000004 /* Frameworks */,
+				600000000000000000000005 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				900000000000000000000001 /* PBXTargetDependency */,
+			);
+			name = WorkHoursFollowTests;
+			productName = WorkHoursFollowTests;
+			productReference = 200000000000000000000005 /* WorkHoursFollowTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		400000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2660;
+				LastUpgradeCheck = 2660;
+				TargetAttributes = {
+					500000000000000000000001 = {
+						CreatedOnToolsVersion = 26.6;
+					};
+					500000000000000000000002 = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = 500000000000000000000001;
+					};
+				};
+			};
+			buildConfigurationList = 800000000000000000000001 /* Build configuration list for PBXProject "WorkHoursFollow" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 700000000000000000000001;
+			productRefGroup = 700000000000000000000005 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				500000000000000000000001 /* WorkHoursFollow */,
+				500000000000000000000002 /* WorkHoursFollowTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		600000000000000000000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		600000000000000000000005 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		600000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				100000000000000000000001 /* WorkHoursFollowApp.swift in Sources */,
+				100000000000000000000002 /* AppTabView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		600000000000000000000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				100000000000000000000003 /* ProjectSmokeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		900000000000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 500000000000000000000001 /* WorkHoursFollow */;
+			targetProxy = 300000000000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A00000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A00000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+		};
+			name = Release;
+		};
+		A00000000000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kseniiakozak.WorkHoursFollow;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		A00000000000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kseniiakozak.WorkHoursFollow;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		A00000000000000000000005 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kseniiakozak.WorkHoursFollowTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WorkHoursFollow.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WorkHoursFollow";
+			};
+			name = Debug;
+		};
+		A00000000000000000000006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kseniiakozak.WorkHoursFollowTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WorkHoursFollow.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WorkHoursFollow";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		800000000000000000000001 /* Build configuration list for PBXProject "WorkHoursFollow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A00000000000000000000001 /* Debug */,
+				A00000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		800000000000000000000002 /* Build configuration list for PBXNativeTarget "WorkHoursFollow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A00000000000000000000003 /* Debug */,
+				A00000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		800000000000000000000003 /* Build configuration list for PBXNativeTarget "WorkHoursFollowTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A00000000000000000000005 /* Debug */,
+				A00000000000000000000006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 400000000000000000000001 /* Project object */;
+}
