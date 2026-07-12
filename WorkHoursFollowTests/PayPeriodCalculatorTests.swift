@@ -65,4 +65,19 @@ final class PayPeriodCalculatorTests: XCTestCase {
         XCTAssertEqual(period.startDate, anchor)
         XCTAssertEqual(period.endDate, TestCalendar.date(2026, 3, 19))
     }
+
+    func testNonGregorianCalendarAnchorValidation() throws {
+        var islamicCalendar = Calendar(identifier: .islamic)
+        islamicCalendar.timeZone = TestCalendar.toronto.timeZone
+        let islamicCalculator = PayPeriodCalculator(calendar: islamicCalendar)
+        
+        // July 17, 2026 is Friday.
+        let anchorFriday = TestCalendar.date(2026, 7, 17)
+        XCTAssertNoThrow(
+            try islamicCalculator.period(
+                containing: anchorFriday,
+                anchorPayday: anchorFriday
+            )
+        )
+    }
 }

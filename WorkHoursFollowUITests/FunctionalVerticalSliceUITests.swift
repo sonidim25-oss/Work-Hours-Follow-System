@@ -147,6 +147,46 @@ final class FunctionalVerticalSliceUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Total Hours, 0h 0m, Total Earned, $0.00"].waitForExistence(timeout: 5))
     }
 
+    func testDuplicateEntryOffersEditOrReplaceFlow() {
+        let app = launchApp(resetData: true)
+        dismissDefaultsNoticeIfNeeded(in: app)
+
+        // 1. Create initial entry
+        app.buttons["Add Work Time"].tap()
+        setEditor(dateLabel: "Friday, July 10", hours: "10", minutes: "12", in: app)
+        app.buttons["entry-editor-save"].tap()
+        XCTAssertTrue(app.staticTexts["10h 12m"].waitForExistence(timeout: 3))
+
+        // 2. Attempt duplicate to trigger "Replace" flow
+        app.buttons["Add Work Time"].tap()
+        setEditor(dateLabel: "Friday, July 10", hours: "8", minutes: "00", in: app)
+        app.buttons["entry-editor-save"].tap()
+
+        let duplicateAlert = app.alerts["Entry Already Exists"]
+        XCTAssertTrue(duplicateAlert.waitForExistence(timeout: 3))
+        XCTAssertTrue(duplicateAlert.buttons["Edit Existing Entry"].exists)
+        XCTAssertTrue(duplicateAlert.buttons["Replace"].exists)
+        XCTAssertTrue(duplicateAlert.buttons["Cancel"].exists)
+
+        // 3. Test Replace
+        duplicateAlert.buttons["Replace"].tap()
+        XCTAssertTrue(app.staticTexts["8h 0m"].waitForExistence(timeout: 3))
+        XCTAssertFalse(app.staticTexts["10h 12m"].exists)
+
+        // 4. Attempt duplicate to trigger "Edit" flow
+        app.buttons["Add Work Time"].tap()
+        setEditor(dateLabel: "Friday, July 10", hours: "5", minutes: "30", in: app)
+        app.buttons["entry-editor-save"].tap()
+
+        XCTAssertTrue(duplicateAlert.waitForExistence(timeout: 3))
+        duplicateAlert.buttons["Edit Existing Entry"].tap()
+
+        // 5. Verify Edit flow populated correctly (should show 8h 0m, not 5h 30m)
+        waitForEditor(title: "Edit Work Time", in: app)
+        XCTAssertEqual(app.pickerWheels.element(boundBy: 0).value as? String, "8")
+        XCTAssertEqual(app.pickerWheels.element(boundBy: 1).value as? String, "00")
+    }
+
     private func launchApp(resetData: Bool) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = fixedClockArguments

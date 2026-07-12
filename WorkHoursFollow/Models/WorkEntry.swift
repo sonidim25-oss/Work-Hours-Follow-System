@@ -15,15 +15,30 @@ final class WorkEntry {
         workDate: Date,
         durationMinutes: Int,
         hourlyRateCents: Int,
-        createdAt: Date,
-        updatedAt: Date
+        createdAt: Date = Date(),
+        updatedAt: Date? = nil
     ) {
         self.id = id
         self.workDate = workDate
         self.durationMinutes = durationMinutes
         self.hourlyRateCents = hourlyRateCents
         self.createdAt = createdAt
-        self.updatedAt = updatedAt
+        self.updatedAt = updatedAt ?? createdAt
+    }
+
+    convenience init(
+        workDate: Date,
+        durationMinutes: Int,
+        hourlyRateCents: Int,
+        now: Date
+    ) {
+        self.init(
+            workDate: workDate,
+            durationMinutes: durationMinutes,
+            hourlyRateCents: hourlyRateCents,
+            createdAt: now,
+            updatedAt: now
+        )
     }
 
     var earningsCents: Int {

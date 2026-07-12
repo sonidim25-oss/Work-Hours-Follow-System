@@ -17,6 +17,19 @@ struct EntryStore {
         return try context.fetch(descriptor)
     }
 
+    private func entries(for day: Date) throws -> [WorkEntry] {
+        let start = calendar.startOfDay(for: day)
+        guard let end = calendar.date(byAdding: .day, value: 1, to: start) else { return [] }
+        let descriptor = FetchDescriptor<WorkEntry>(
+            predicate: #Predicate { $0.workDate >= start && $0.workDate < end }
+        )
+        return try context.fetch(descriptor)
+    }
+
+    /// We use a dedicated child context for creation to prevent polluting the main
+    /// context with an unsaved insertion. If `save()` fails, we can cleanly discard
+    /// the child context without needing to call `rollback()` on the main context,
+    /// which would inadvertently destroy any other unrelated pending changes.
     func create(
         date: Date,
         durationMinutes: Int,
@@ -30,7 +43,7 @@ struct EntryStore {
         try validator.validate(
             date: date,
             now: now,
-            existingEntries: try allEntries(),
+            existingEntries: try entries(for: date),
             excluding: nil
         )
 
@@ -38,9 +51,9 @@ struct EntryStore {
             workDate: calendar.startOfDay(for: date),
             durationMinutes: durationMinutes,
             hourlyRateCents: hourlyRateCents,
-            createdAt: now,
-            updatedAt: now
+            now: now
         )
+        
         let creationContext = ModelContext(context.container)
         creationContext.autosaveEnabled = false
         creationContext.insert(entry)
@@ -62,7 +75,7 @@ struct EntryStore {
         try validator.validate(
             date: date,
             now: now,
-            existingEntries: try allEntries(),
+            existingEntries: try entries(for: date),
             excluding: entry.id
         )
 
@@ -83,6 +96,13 @@ struct EntryStore {
         }
     }
 
+    /// We use a dedicated child context for deletion because calling `context.delete()`
+    /// irrevocably mutates the in-memory object state. If the subsequent `save()` fails,
+    /// we cannot safely "undelete" the object or roll back the context without leaving
+    /// the main context and its loaded models in an inconsistent, corrupted state.
+    ///
+    /// If the entry is no longer present in the persistent store, this method returns
+    /// silently, as the desired end state (the entry being deleted) is already met.
     func delete(_ entry: WorkEntry) throws {
         let entryID = entry.id
         let deletionContext = ModelContext(context.container)
@@ -97,10 +117,17 @@ struct EntryStore {
     }
 
     func entries(in period: PayPeriod) throws -> [WorkEntry] {
-        try allEntries().filter { period.contains($0.workDate, calendar: calendar) }
+        let start = calendar.startOfDay(for: period.startDate)
+        guard let end = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: period.endDate)) else { return [] }
+        let descriptor = FetchDescriptor<WorkEntry>(
+            predicate: #Predicate { $0.workDate >= start && $0.workDate < end },
+            sortBy: [SortDescriptor(\.workDate, order: .reverse)]
+        )
+        return try context.fetch(descriptor)
     }
 }
 
 private enum EntryStoreError: Error {
     case createdEntryUnavailable
 }
+

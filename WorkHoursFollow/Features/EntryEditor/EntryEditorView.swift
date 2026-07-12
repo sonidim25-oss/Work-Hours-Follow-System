@@ -137,30 +137,28 @@ struct EntryEditorView: View {
             .toolbar(.hidden, for: .navigationBar)
             .tint(AppColors.accent)
         }
-        .alert(item: $presentedAlert) { alert in
+        .alert(
+            presentedAlert?.title ?? "",
+            isPresented: Binding(
+                get: { presentedAlert != nil },
+                set: { if !$0 { presentedAlert = nil } }
+            ),
+            presenting: presentedAlert
+        ) { alert in
             switch alert {
             case .duplicate(let id):
-                Alert(
-                    title: Text("Entry Already Exists"),
-                    message: Text("There is already work time recorded for this date."),
-                    primaryButton: .default(Text("Edit Existing Entry")) {
-                        editExistingEntry(id: id)
-                    },
-                    secondaryButton: .cancel()
-                )
-            case .persistence:
-                Alert(
-                    title: Text("Couldn’t Save Work Time"),
-                    message: Text("Your changes are still here. Please try saving again."),
-                    dismissButton: .default(Text("OK"))
-                )
-            case .validation(let message):
-                Alert(
-                    title: Text("Check Work Time"),
-                    message: Text(message),
-                    dismissButton: .default(Text("OK"))
-                )
+                Button("Edit Existing Entry") {
+                    editExistingEntry(id: id)
+                }
+                Button("Replace", role: .destructive) {
+                    replaceExistingEntry(id: id)
+                }
+                Button("Cancel", role: .cancel) {}
+            case .persistence, .validation:
+                Button("OK", role: .cancel) {}
             }
+        } message: { alert in
+            Text(alert.message)
         }
     }
 
@@ -401,6 +399,27 @@ struct EntryEditorView: View {
         editingEntry = entry
         state = EntryEditorState(entry: entry)
     }
+
+    private func replaceExistingEntry(id: UUID) {
+        guard let durationMinutes = state.durationMinutes else { return }
+        let store = EntryStore(context: modelContext, calendar: environment.calendar)
+        guard let entry = try? store.allEntries().first(where: { $0.id == id }) else {
+            presentedAlert = .persistence
+            return
+        }
+        
+        do {
+            try store.update(
+                entry,
+                date: state.date,
+                durationMinutes: durationMinutes,
+                now: environment.now()
+            )
+            dismiss()
+        } catch {
+            presentedAlert = .persistence
+        }
+    }
 }
 
 private enum EditorAlert: Identifiable {
@@ -416,6 +435,22 @@ private enum EditorAlert: Identifiable {
             "persistence"
         case .validation(let message):
             "validation-\(message)"
+        }
+    }
+
+    var title: String {
+        switch self {
+        case .duplicate: return "Entry Already Exists"
+        case .persistence: return "Couldn’t Save Work Time"
+        case .validation: return "Check Work Time"
+        }
+    }
+
+    var message: String {
+        switch self {
+        case .duplicate: return "There is already work time recorded for this date."
+        case .persistence: return "Your changes are still here. Please try saving again."
+        case .validation(let msg): return msg
         }
     }
 }

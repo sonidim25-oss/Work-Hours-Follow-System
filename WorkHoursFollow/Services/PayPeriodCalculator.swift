@@ -10,7 +10,9 @@ struct PayPeriodCalculator: Sendable {
 
     func period(containing date: Date, anchorPayday: Date) throws -> PayPeriod {
         let anchor = calendar.startOfDay(for: anchorPayday)
-        guard calendar.component(.weekday, from: anchor) == 6 else {
+        var gregorian = Calendar(identifier: .gregorian)
+        gregorian.timeZone = calendar.timeZone
+        guard gregorian.component(.weekday, from: anchor) == 6 else {
             throw PayPeriodCalculationError.anchorIsNotFriday
         }
 

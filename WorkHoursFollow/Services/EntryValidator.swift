@@ -31,7 +31,7 @@ struct EntryValidator {
         }
 
         if let duplicate = existingEntries.first(where: {
-            $0.id != id && calendar.isDate($0.workDate, inSameDayAs: day)
+            $0.id != id && calendar.isDate($0.workDate, inSameDayAs: date)
         }) {
             throw EntryValidationError.duplicateDate(duplicate.id)
         }

@@ -96,18 +96,15 @@ struct AppEnvironment: Sendable {
             preconditionFailure("The default anchor payday must be a valid calendar date")
         }
 
-        return AppSettings(
-            defaultHourlyRateCents: 2300,
-            currencyCode: "CAD",
-            anchorPayday: anchorPayday,
-            payPeriodLengthDays: 14
-        )
+        return AppSettings(anchorPayday: anchorPayday)
     }
 
     static func settingsAreValid(_ settings: AppSettings, calendar: Calendar) -> Bool {
-        settings.defaultHourlyRateCents > 0
+        var gregorian = Calendar(identifier: .gregorian)
+        gregorian.timeZone = calendar.timeZone
+        return settings.defaultHourlyRateCents > 0
             && !settings.currencyCode.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             && settings.payPeriodLengthDays == 14
-            && calendar.component(.weekday, from: settings.anchorPayday) == 6
+            && gregorian.component(.weekday, from: settings.anchorPayday) == 6
     }
 }
