@@ -69,7 +69,7 @@ struct WorkEntryCard: View {
             Text(AppFormatters.currency(cents: entry.earningsCents, code: currencyCode))
                 .font(.callout.weight(.medium))
                 .monospacedDigit()
-                .foregroundStyle(AppColors.gold)
+                .foregroundStyle(AppColors.textDark)
         }
         .frame(maxWidth: dynamicTypeSize.isAccessibilitySize ? .infinity : nil, alignment: .leading)
     }

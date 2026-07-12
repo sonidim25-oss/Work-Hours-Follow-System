@@ -1,5 +1,51 @@
 import Foundation
 
+struct EffectiveAppSettings: Equatable, Sendable {
+    let defaultHourlyRateCents: Int
+    let currencyCode: String
+    let anchorPayday: Date
+    let payPeriodLengthDays: Int
+
+    init(
+        defaultHourlyRateCents: Int,
+        currencyCode: String,
+        anchorPayday: Date,
+        payPeriodLengthDays: Int
+    ) {
+        self.defaultHourlyRateCents = defaultHourlyRateCents
+        self.currencyCode = currencyCode
+        self.anchorPayday = anchorPayday
+        self.payPeriodLengthDays = payPeriodLengthDays
+    }
+
+    init(_ settings: AppSettings) {
+        self.init(
+            defaultHourlyRateCents: settings.defaultHourlyRateCents,
+            currencyCode: settings.currencyCode,
+            anchorPayday: settings.anchorPayday,
+            payPeriodLengthDays: settings.payPeriodLengthDays
+        )
+    }
+}
+
+struct AppSettingsResolution {
+    let effective: EffectiveAppSettings
+    let needsRepair: Bool
+
+    static func resolve(_ settings: [AppSettings], calendar: Calendar) -> Self {
+        if settings.count == 1,
+           let onlySettings = settings.first,
+           AppEnvironment.settingsAreValid(onlySettings, calendar: calendar) {
+            return Self(effective: EffectiveAppSettings(onlySettings), needsRepair: false)
+        }
+
+        return Self(
+            effective: EffectiveAppSettings(AppEnvironment.defaultSettings(calendar: calendar)),
+            needsRepair: true
+        )
+    }
+}
+
 struct AppEnvironment: Sendable {
     var calendar: Calendar
     var now: @Sendable () -> Date

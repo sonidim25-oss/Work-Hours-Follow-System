@@ -32,13 +32,18 @@ struct AppTabView: View {
 
     var body: some View {
         TabView {
-            OverviewView(environment: environment, today: today) {
+            OverviewView(
+                environment: environment,
+                settings: effectiveSettings,
+                today: today
+            ) {
                 editorRoute = .create
             }
             .tabItem { Label("Overview", systemImage: "house.fill") }
 
             EntriesView(
                 environment: environment,
+                settings: effectiveSettings,
                 today: today,
                 onAdd: { editorRoute = .create },
                 onEdit: { editorRoute = .edit($0) }
@@ -80,21 +85,16 @@ struct AppTabView: View {
         }
     }
 
-    private var effectiveSettings: AppSettings {
-        if settings.count == 1,
-           let settings = settings.first,
-           AppEnvironment.settingsAreValid(settings, calendar: environment.calendar) {
-            return settings
-        }
-        return AppEnvironment.defaultSettings(calendar: environment.calendar)
+    private var settingsResolution: AppSettingsResolution {
+        AppSettingsResolution.resolve(settings, calendar: environment.calendar)
+    }
+
+    private var effectiveSettings: EffectiveAppSettings {
+        settingsResolution.effective
     }
 
     private func restoreSettingsIfNeeded() {
-        if settings.count == 1,
-           let settings = settings.first,
-           AppEnvironment.settingsAreValid(settings, calendar: environment.calendar) {
-            return
-        }
+        guard settingsResolution.needsRepair else { return }
 
         settings.forEach { modelContext.delete($0) }
         modelContext.insert(AppEnvironment.defaultSettings(calendar: environment.calendar))

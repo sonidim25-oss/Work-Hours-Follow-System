@@ -273,6 +273,8 @@ final class EntryStoreTests: XCTestCase {
 
         try store.delete(entry)
 
+        XCTAssertEqual(try store.allEntries().map(\.id), [unselectedEntry.id])
+
         let verificationContext = ModelContext(container)
         XCTAssertEqual(
             try verificationContext.fetch(FetchDescriptor<WorkEntry>()).map(\.id),

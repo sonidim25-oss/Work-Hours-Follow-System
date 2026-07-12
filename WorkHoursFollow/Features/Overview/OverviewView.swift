@@ -3,14 +3,20 @@ import SwiftUI
 
 struct OverviewView: View {
     @Query(sort: \WorkEntry.workDate, order: .reverse) private var entries: [WorkEntry]
-    @Query private var settings: [AppSettings]
 
     let environment: AppEnvironment
+    let settings: EffectiveAppSettings
     let today: Date
     let onAdd: () -> Void
 
-    init(environment: AppEnvironment, today: Date, onAdd: @escaping () -> Void) {
+    init(
+        environment: AppEnvironment,
+        settings: EffectiveAppSettings,
+        today: Date,
+        onAdd: @escaping () -> Void
+    ) {
         self.environment = environment
+        self.settings = settings
         self.today = today
         self.onAdd = onAdd
     }
@@ -48,7 +54,7 @@ struct OverviewView: View {
                         totalTime: AppFormatters.duration(snapshot.summary.totalMinutes),
                         earnings: AppFormatters.currency(
                             cents: snapshot.summary.totalEarningsCents,
-                            code: effectiveSettings.currencyCode
+                            code: settings.currencyCode
                         )
                     )
 
@@ -65,16 +71,10 @@ struct OverviewView: View {
         .background(AppColors.background.ignoresSafeArea())
     }
 
-    private var effectiveSettings: AppSettings {
-        settings.first(where: {
-            AppEnvironment.settingsAreValid($0, calendar: environment.calendar)
-        }) ?? AppEnvironment.defaultSettings(calendar: environment.calendar)
-    }
-
     private var snapshot: CurrentPeriodSnapshot? {
         try? CurrentPeriodSnapshot(
             entries: entries,
-            anchorPayday: effectiveSettings.anchorPayday,
+            anchorPayday: settings.anchorPayday,
             today: today,
             calendar: environment.calendar
         )

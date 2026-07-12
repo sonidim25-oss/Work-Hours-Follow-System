@@ -94,7 +94,7 @@ struct EntryEditorView: View {
     @State private var editingEntry: WorkEntry?
     @State private var presentedAlert: EditorAlert?
 
-    init(route: EditorRoute, environment: AppEnvironment, settings: AppSettings) {
+    init(route: EditorRoute, environment: AppEnvironment, settings: EffectiveAppSettings) {
         self.environment = environment
         currencyCode = settings.currencyCode
         let entry = route.entry

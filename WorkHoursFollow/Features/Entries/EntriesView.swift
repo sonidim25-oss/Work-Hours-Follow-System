@@ -4,9 +4,9 @@ import SwiftUI
 struct EntriesView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \WorkEntry.workDate, order: .reverse) private var entries: [WorkEntry]
-    @Query private var settings: [AppSettings]
 
     let environment: AppEnvironment
+    let settings: EffectiveAppSettings
     let today: Date
     let onAdd: () -> Void
     let onEdit: (WorkEntry) -> Void
@@ -16,11 +16,13 @@ struct EntriesView: View {
 
     init(
         environment: AppEnvironment,
+        settings: EffectiveAppSettings,
         today: Date,
         onAdd: @escaping () -> Void,
         onEdit: @escaping (WorkEntry) -> Void
     ) {
         self.environment = environment
+        self.settings = settings
         self.today = today
         self.onAdd = onAdd
         self.onEdit = onEdit
@@ -64,16 +66,10 @@ struct EntriesView: View {
         }
     }
 
-    private var effectiveSettings: AppSettings {
-        settings.first(where: {
-            AppEnvironment.settingsAreValid($0, calendar: environment.calendar)
-        }) ?? AppEnvironment.defaultSettings(calendar: environment.calendar)
-    }
-
     private var snapshot: CurrentPeriodSnapshot? {
         try? CurrentPeriodSnapshot(
             entries: entries,
-            anchorPayday: effectiveSettings.anchorPayday,
+            anchorPayday: settings.anchorPayday,
             today: today,
             calendar: environment.calendar
         )
@@ -122,7 +118,7 @@ struct EntriesView: View {
                 ForEach(currentEntries, id: \.id) { entry in
                     WorkEntryCard(
                         entry: entry,
-                        currencyCode: effectiveSettings.currencyCode,
+                        currencyCode: settings.currencyCode,
                         calendar: environment.calendar
                     ) {
                         onEdit(entry)
