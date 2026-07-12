@@ -13,6 +13,10 @@
 		100000000000000000000005 /* DurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000007 /* DurationService.swift */; };
 		100000000000000000000006 /* EarningsCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000008 /* EarningsCalculatorTests.swift */; };
 		100000000000000000000007 /* EarningsCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000009 /* EarningsCalculator.swift */; };
+		100000000000000000000008 /* TestCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000000A /* TestCalendar.swift */; };
+		100000000000000000000009 /* PayPeriodCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000000B /* PayPeriodCalculatorTests.swift */; };
+		10000000000000000000000A /* PayPeriod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000000C /* PayPeriod.swift */; };
+		10000000000000000000000B /* PayPeriodCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000000D /* PayPeriodCalculator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +38,10 @@
 		200000000000000000000007 /* DurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationService.swift; sourceTree = "<group>"; };
 		200000000000000000000008 /* EarningsCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarningsCalculatorTests.swift; sourceTree = "<group>"; };
 		200000000000000000000009 /* EarningsCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarningsCalculator.swift; sourceTree = "<group>"; };
+		20000000000000000000000A /* TestCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCalendar.swift; sourceTree = "<group>"; };
+		20000000000000000000000B /* PayPeriodCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayPeriodCalculatorTests.swift; sourceTree = "<group>"; };
+		20000000000000000000000C /* PayPeriod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayPeriod.swift; sourceTree = "<group>"; };
+		20000000000000000000000D /* PayPeriodCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayPeriodCalculator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +75,7 @@
 			isa = PBXGroup;
 			children = (
 				700000000000000000000003 /* App */,
+				700000000000000000000007 /* Models */,
 				700000000000000000000006 /* Services */,
 			);
 			path = WorkHoursFollow;
@@ -86,6 +95,8 @@
 			children = (
 				200000000000000000000006 /* DurationServiceTests.swift */,
 				200000000000000000000008 /* EarningsCalculatorTests.swift */,
+				20000000000000000000000A /* TestCalendar.swift */,
+				20000000000000000000000B /* PayPeriodCalculatorTests.swift */,
 			);
 			path = WorkHoursFollowTests;
 			sourceTree = "<group>";
@@ -104,8 +115,17 @@
 			children = (
 				200000000000000000000007 /* DurationService.swift */,
 				200000000000000000000009 /* EarningsCalculator.swift */,
+				20000000000000000000000D /* PayPeriodCalculator.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		700000000000000000000007 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				20000000000000000000000C /* PayPeriod.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -210,6 +230,8 @@
 				100000000000000000000002 /* AppTabView.swift in Sources */,
 				100000000000000000000005 /* DurationService.swift in Sources */,
 				100000000000000000000007 /* EarningsCalculator.swift in Sources */,
+				10000000000000000000000A /* PayPeriod.swift in Sources */,
+				10000000000000000000000B /* PayPeriodCalculator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,6 +241,8 @@
 			files = (
 				100000000000000000000004 /* DurationServiceTests.swift in Sources */,
 				100000000000000000000006 /* EarningsCalculatorTests.swift in Sources */,
+				100000000000000000000008 /* TestCalendar.swift in Sources */,
+				100000000000000000000009 /* PayPeriodCalculatorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
