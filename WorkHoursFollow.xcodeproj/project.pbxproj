@@ -103,14 +103,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		600000000000000000000006 /* Frameworks */ = {
+		600000000000000000000004 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		600000000000000000000004 /* Frameworks */ = {
+		600000000000000000000006 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -188,14 +188,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		700000000000000000000011 /* WorkHoursFollowUITests */ = {
-			isa = PBXGroup;
-			children = (
-				200000000000000000000026 /* FunctionalVerticalSliceUITests.swift */,
-			);
-			path = WorkHoursFollowUITests;
-			sourceTree = "<group>";
-		};
 		700000000000000000000006 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -216,6 +208,35 @@
 				200000000000000000000010 /* AppSettings.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		700000000000000000000008 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000017 /* AppFormatters.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		700000000000000000000009 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000018 /* AppColors.swift */,
+				200000000000000000000019 /* AppTypography.swift */,
+				20000000000000000000001A /* AppSpacing.swift */,
+				20000000000000000000001B /* AppRadius.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		70000000000000000000000A /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				20000000000000000000001C /* PrimaryButton.swift */,
+				20000000000000000000001D /* SummaryCard.swift */,
+				20000000000000000000001E /* WorkEntryCard.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		70000000000000000000000B /* Features */ = {
@@ -270,33 +291,12 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
-		700000000000000000000008 /* Utilities */ = {
+		700000000000000000000011 /* WorkHoursFollowUITests */ = {
 			isa = PBXGroup;
 			children = (
-				200000000000000000000017 /* AppFormatters.swift */,
+				200000000000000000000026 /* FunctionalVerticalSliceUITests.swift */,
 			);
-			path = Utilities;
-			sourceTree = "<group>";
-		};
-		700000000000000000000009 /* DesignSystem */ = {
-			isa = PBXGroup;
-			children = (
-				200000000000000000000018 /* AppColors.swift */,
-				200000000000000000000019 /* AppTypography.swift */,
-				20000000000000000000001A /* AppSpacing.swift */,
-				20000000000000000000001B /* AppRadius.swift */,
-			);
-			path = DesignSystem;
-			sourceTree = "<group>";
-		};
-		70000000000000000000000A /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				20000000000000000000001C /* PrimaryButton.swift */,
-				20000000000000000000001D /* SummaryCard.swift */,
-				20000000000000000000001E /* WorkEntryCard.swift */,
-			);
-			path = Components;
+			path = WorkHoursFollowUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -541,7 +541,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-		};
+			};
 			name = Release;
 		};
 		A00000000000000000000003 /* Debug */ = {
@@ -549,6 +549,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FX2U267X4Y;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -566,6 +567,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FX2U267X4Y;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
