@@ -7,8 +7,7 @@ final class FunctionalVerticalSliceUITests: XCTestCase {
     }
 
     func testOverviewShowsExpectedLivePeriod() {
-        let app = XCUIApplication()
-        app.launch()
+        let app = launchApp(resetData: true)
         dismissDefaultsNoticeIfNeeded(in: app)
 
         XCTAssertTrue(app.staticTexts["Work Hours Follow"].waitForExistence(timeout: 5))
@@ -18,19 +17,19 @@ final class FunctionalVerticalSliceUITests: XCTestCase {
         capture("01-overview-live-period")
 
         app.buttons["Add Work Time"].tap()
-        XCTAssertTrue(app.navigationBars["Add Work Time"].waitForExistence(timeout: 3))
+        waitForEditor(title: "Add Work Time", in: app)
+        assertEditorToolbarGeometry(in: app)
         capture("02-add-editor-default")
     }
 
     func testAddEditDuplicateDeleteAndRelaunchPersistence() {
-        let app = XCUIApplication()
-        app.launch()
+        let app = launchApp(resetData: true)
         dismissDefaultsNoticeIfNeeded(in: app)
 
         XCTAssertTrue(app.staticTexts["Total Hours, 0h 0m, Total Earned, $0.00"].waitForExistence(timeout: 5))
 
         app.buttons["Add Work Time"].tap()
-        XCTAssertTrue(app.navigationBars["Add Work Time"].waitForExistence(timeout: 3))
+        waitForEditor(title: "Add Work Time", in: app)
         XCTAssertFalse(app.buttons["Monday, July 13"].isEnabled)
         XCTAssertFalse(app.buttons["entry-editor-save"].isEnabled)
         setEditor(dateLabel: "Friday, July 10", hours: "10", minutes: "12", in: app)
@@ -60,7 +59,7 @@ final class FunctionalVerticalSliceUITests: XCTestCase {
         capture("05-duplicate-date-alert")
         duplicateAlert.buttons["Edit Existing Entry"].tap()
 
-        XCTAssertTrue(app.navigationBars["Edit Work Time"].waitForExistence(timeout: 3))
+        waitForEditor(title: "Edit Work Time", in: app)
         XCTAssertEqual(app.pickerWheels.element(boundBy: 0).value as? String, "10")
         XCTAssertEqual(app.pickerWheels.element(boundBy: 1).value as? String, "12")
         app.pickerWheels.element(boundBy: 0).adjust(toPickerWheelValue: "9")
@@ -85,6 +84,7 @@ final class FunctionalVerticalSliceUITests: XCTestCase {
         XCTAssertTrue(app.buttons["Wed, Jul 8, 1h 30m, $34.50"].exists)
 
         app.terminate()
+        app.launchArguments = []
         app.launch()
         app.buttons["Entries"].tap()
         XCTAssertTrue(app.buttons["Wed, Jul 8, 1h 30m, $34.50"].waitForExistence(timeout: 5))
@@ -98,8 +98,7 @@ final class FunctionalVerticalSliceUITests: XCTestCase {
     }
 
     func testAccessibilityDynamicTypeLayoutRemainsNavigable() {
-        let app = XCUIApplication()
-        app.launch()
+        let app = launchApp(resetData: true)
         dismissDefaultsNoticeIfNeeded(in: app)
 
         XCTAssertTrue(app.staticTexts["Work Hours Follow"].waitForExistence(timeout: 5))
@@ -113,11 +112,72 @@ final class FunctionalVerticalSliceUITests: XCTestCase {
         capture("08-overview-accessibility-type-se")
         addButton.tap()
 
-        XCTAssertTrue(app.navigationBars["Add Work Time"].waitForExistence(timeout: 3))
+        waitForEditor(title: "Add Work Time", in: app)
+        assertEditorToolbarGeometry(in: app)
         XCTAssertEqual(app.pickerWheels.count, 2)
         XCTAssertTrue(app.staticTexts["Enter a work duration greater than zero."].exists)
         XCTAssertGreaterThanOrEqual(app.buttons["entry-editor-save"].frame.width, 44)
         capture("09-editor-accessibility-type-se")
+    }
+
+    func testResetLaunchArgumentClearsPersistedEntries() {
+        let app = launchApp(resetData: true)
+        dismissDefaultsNoticeIfNeeded(in: app)
+        XCTAssertTrue(app.staticTexts["Total Hours, 0h 0m, Total Earned, $0.00"].waitForExistence(timeout: 5))
+
+        app.buttons["Add Work Time"].tap()
+        app.pickerWheels.element(boundBy: 0).adjust(toPickerWheelValue: "1")
+        app.buttons["entry-editor-save"].tap()
+        XCTAssertTrue(app.staticTexts["1h 0m"].waitForExistence(timeout: 3))
+
+        app.terminate()
+        app.launchArguments = ["--ui-testing-reset-data"]
+        app.launch()
+        XCTAssertTrue(
+            app.descendants(matching: .any)["ui-test-reset-complete"]
+                .waitForExistence(timeout: 5)
+        )
+        dismissDefaultsNoticeIfNeeded(in: app)
+        XCTAssertTrue(app.staticTexts["Total Hours, 0h 0m, Total Earned, $0.00"].waitForExistence(timeout: 5))
+    }
+
+    private func launchApp(resetData: Bool) -> XCUIApplication {
+        let app = XCUIApplication()
+        app.launchArguments = resetData ? ["--ui-testing-reset-data"] : []
+        app.launch()
+        if resetData {
+            XCTAssertTrue(
+                app.descendants(matching: .any)["ui-test-reset-complete"]
+                    .waitForExistence(timeout: 5)
+            )
+        }
+        return app
+    }
+
+    private func waitForEditor(title: String, in app: XCUIApplication) {
+        let titleElement = app.staticTexts["entry-editor-title"]
+        XCTAssertTrue(titleElement.waitForExistence(timeout: 3))
+        XCTAssertEqual(titleElement.label, title)
+    }
+
+    private func assertEditorToolbarGeometry(in app: XCUIApplication) {
+        let windowFrame = app.windows.firstMatch.frame
+        let cancel = app.buttons["entry-editor-cancel"]
+        let save = app.buttons["entry-editor-save"]
+        let title = app.staticTexts["entry-editor-title"]
+
+        XCTAssertTrue(cancel.exists)
+        XCTAssertTrue(cancel.isHittable)
+        XCTAssertGreaterThanOrEqual(cancel.frame.width, 44)
+        XCTAssertGreaterThanOrEqual(cancel.frame.height, 44)
+        XCTAssertGreaterThanOrEqual(cancel.frame.minX, windowFrame.minX + 8)
+        XCTAssertTrue(save.exists)
+        XCTAssertTrue(save.isHittable)
+        XCTAssertGreaterThanOrEqual(save.frame.width, 44)
+        XCTAssertGreaterThanOrEqual(save.frame.height, 44)
+        XCTAssertLessThanOrEqual(save.frame.maxX, windowFrame.maxX - 8)
+        XCTAssertFalse(cancel.frame.intersects(title.frame))
+        XCTAssertFalse(save.frame.intersects(title.frame))
     }
 
     private func dismissDefaultsNoticeIfNeeded(in app: XCUIApplication) {

@@ -24,6 +24,9 @@ struct AppTabView: View {
     @State private var editorRoute: EditorRoute?
     @State private var settingsNotice: SettingsNotice?
     @State private var today: Date
+#if DEBUG
+    @State private var uiTestResetComplete = false
+#endif
 
     init(environment: AppEnvironment) {
         self.environment = environment
@@ -60,7 +63,7 @@ struct AppTabView: View {
         .toolbarBackground(AppColors.backgroundElevated, for: .tabBar)
         .toolbarBackground(.visible, for: .tabBar)
         .toolbarColorScheme(.dark, for: .tabBar)
-        .task { restoreSettingsIfNeeded() }
+        .task { prepareInitialData() }
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .active {
                 today = environment.now()
@@ -83,6 +86,18 @@ struct AppTabView: View {
                 dismissButton: .default(Text("OK"))
             )
         }
+        .overlay(alignment: .topLeading) {
+#if DEBUG
+            if uiTestResetComplete {
+                Color.clear
+                    .frame(width: 1, height: 1)
+                    .accessibilityElement()
+                    .accessibilityLabel("UI test reset complete")
+                    .accessibilityIdentifier("ui-test-reset-complete")
+                    .allowsHitTesting(false)
+            }
+#endif
+        }
     }
 
     private var settingsResolution: AppSettingsResolution {
@@ -92,6 +107,31 @@ struct AppTabView: View {
     private var effectiveSettings: EffectiveAppSettings {
         settingsResolution.effective
     }
+
+    private func prepareInitialData() {
+#if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--ui-testing-reset-data") {
+            resetUITestData()
+            return
+        }
+#endif
+        restoreSettingsIfNeeded()
+    }
+
+#if DEBUG
+    private func resetUITestData() {
+        do {
+            try modelContext.fetch(FetchDescriptor<WorkEntry>()).forEach(modelContext.delete)
+            try modelContext.fetch(FetchDescriptor<AppSettings>()).forEach(modelContext.delete)
+            modelContext.insert(AppEnvironment.defaultSettings(calendar: environment.calendar))
+            try modelContext.save()
+            uiTestResetComplete = true
+        } catch {
+            modelContext.rollback()
+            settingsNotice = .restoreFailed
+        }
+    }
+#endif
 
     private func restoreSettingsIfNeeded() {
         guard settingsResolution.needsRepair else { return }

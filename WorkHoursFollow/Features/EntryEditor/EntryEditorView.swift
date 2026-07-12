@@ -110,51 +110,31 @@ struct EntryEditorView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: AppSpacing.lg) {
-                    dateSection
-                    durationSection
-                    earningsSection
+            VStack(spacing: 0) {
+                editorHeader
 
-                    if let validationMessage = state.validationMessage(
-                        now: environment.now(),
-                        calendar: environment.calendar
-                    ) {
-                        Label(validationMessage, systemImage: "exclamationmark.circle")
-                            .font(.callout)
-                            .foregroundStyle(AppColors.textLight)
-                            .accessibilityIdentifier("entry-editor-validation")
+                ScrollView {
+                    VStack(alignment: .leading, spacing: AppSpacing.lg) {
+                        dateSection
+                        durationSection
+                        earningsSection
+
+                        if let validationMessage = state.validationMessage(
+                            now: environment.now(),
+                            calendar: environment.calendar
+                        ) {
+                            Label(validationMessage, systemImage: "exclamationmark.circle")
+                                .font(.callout)
+                                .foregroundStyle(AppColors.textLight)
+                                .accessibilityIdentifier("entry-editor-validation")
+                        }
                     }
+                    .padding(.horizontal, AppSpacing.lg)
+                    .padding(.vertical, AppSpacing.lg)
                 }
-                .padding(.horizontal, AppSpacing.lg)
-                .padding(.vertical, AppSpacing.lg)
+                .background(AppColors.background.ignoresSafeArea())
             }
-            .background(AppColors.background.ignoresSafeArea())
-            .navigationTitle(editingEntry == nil ? "Add Work Time" : "Edit Work Time")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(AppColors.backgroundElevated, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .toolbarColorScheme(.dark, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
-                        .foregroundStyle(AppColors.textLight)
-                        .frame(minWidth: 44, minHeight: 44)
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save", action: save)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(AppColors.textLight)
-                        .frame(minWidth: 44, minHeight: 44)
-                        .disabled(
-                            !state.canSave(
-                                now: environment.now(),
-                                calendar: environment.calendar
-                            )
-                        )
-                        .accessibilityIdentifier("entry-editor-save")
-                }
-            }
+            .toolbar(.hidden, for: .navigationBar)
             .tint(AppColors.accent)
         }
         .alert(item: $presentedAlert) { alert in
@@ -176,6 +156,67 @@ struct EntryEditorView: View {
                 )
             }
         }
+    }
+
+    private var editorTitle: String {
+        editingEntry == nil ? "Add Work Time" : "Edit Work Time"
+    }
+
+    private var editorHeader: some View {
+        VStack(spacing: dynamicTypeSize.isAccessibilitySize ? AppSpacing.xs : 0) {
+            HStack(spacing: AppSpacing.xs) {
+                headerButton("Cancel", identifier: "entry-editor-cancel") {
+                    dismiss()
+                }
+
+                Spacer(minLength: AppSpacing.xs)
+
+                if !dynamicTypeSize.isAccessibilitySize {
+                    editorHeaderTitle
+                }
+
+                Spacer(minLength: AppSpacing.xs)
+
+                headerButton("Save", identifier: "entry-editor-save", action: save)
+                    .fontWeight(.semibold)
+                    .disabled(
+                        !state.canSave(
+                            now: environment.now(),
+                            calendar: environment.calendar
+                        )
+                    )
+            }
+
+            if dynamicTypeSize.isAccessibilitySize {
+                editorHeaderTitle
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .padding(.horizontal, AppSpacing.md)
+        .padding(.vertical, AppSpacing.xs)
+        .foregroundStyle(AppColors.textLight)
+        .background(AppColors.backgroundElevated)
+    }
+
+    private var editorHeaderTitle: some View {
+        Text(editorTitle)
+            .font(.headline)
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
+            .accessibilityIdentifier("entry-editor-title")
+    }
+
+    private func headerButton(
+        _ title: String,
+        identifier: String,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(title, action: action)
+            .lineLimit(1)
+            .fixedSize(horizontal: true, vertical: false)
+            .frame(minWidth: 64, minHeight: 44)
+            .contentShape(Rectangle())
+            .accessibilityIdentifier(identifier)
     }
 
     private var dateSection: some View {
