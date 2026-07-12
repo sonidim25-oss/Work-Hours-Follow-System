@@ -8,6 +8,8 @@ final class AppSettings {
     var anchorPayday: Date
     var payPeriodLengthDays: Int
 
+    /// A static, hardcoded default Friday used only for initial app seeding on first run.
+    /// The user is expected to configure their actual anchor payday in Settings.
     static var defaultAnchorPayday: Date {
         var gregorian = Calendar(identifier: .gregorian)
         return gregorian.date(from: DateComponents(year: 2026, month: 7, day: 17))!
