@@ -43,6 +43,42 @@ final class EntryStoreTests: XCTestCase {
         XCTAssertTrue(try store.allEntries().isEmpty)
     }
 
+    func testCreateRejectsNonPositiveDurationWithoutInserting() throws {
+        for invalidDuration in [0, -1] {
+            let (_, store) = try makeStore()
+
+            XCTAssertThrowsError(
+                try store.create(
+                    date: TestCalendar.date(2026, 7, 10),
+                    durationMinutes: invalidDuration,
+                    hourlyRateCents: 2_300,
+                    now: TestCalendar.date(2026, 7, 11)
+                )
+            ) {
+                XCTAssertEqual($0 as? EntryValidationError, .nonPositiveDuration)
+            }
+            XCTAssertTrue(try store.allEntries().isEmpty)
+        }
+    }
+
+    func testCreateRejectsNonPositiveHourlyRateWithoutInserting() throws {
+        for invalidRate in [0, -1] {
+            let (_, store) = try makeStore()
+
+            XCTAssertThrowsError(
+                try store.create(
+                    date: TestCalendar.date(2026, 7, 10),
+                    durationMinutes: 60,
+                    hourlyRateCents: invalidRate,
+                    now: TestCalendar.date(2026, 7, 11)
+                )
+            ) {
+                XCTAssertEqual($0 as? EntryValidationError, .nonPositiveHourlyRate)
+            }
+            XCTAssertTrue(try store.allEntries().isEmpty)
+        }
+    }
+
     func testFailedCreateRemovesUnsavedEntryFromContext() throws {
         let storeURL = FileManager.default.temporaryDirectory
             .appending(path: "EntryStoreTests-\(UUID().uuidString).sqlite")
@@ -131,6 +167,76 @@ final class EntryStoreTests: XCTestCase {
         XCTAssertEqual(entry.hourlyRateCents, 2_300)
         XCTAssertEqual(entry.durationMinutes, 90)
         XCTAssertEqual(entry.updatedAt, updateTime)
+    }
+
+    func testUpdateRejectsNonPositiveDurationWithoutMutationOrUnsafeEarnings() throws {
+        let (_, store) = try makeStore()
+        let entry = try store.create(
+            date: TestCalendar.date(2026, 7, 16),
+            durationMinutes: 60,
+            hourlyRateCents: 2_300,
+            now: TestCalendar.date(2026, 7, 20)
+        )
+        let originalUpdatedAt = entry.updatedAt
+
+        for invalidDuration in [0, -1] {
+            XCTAssertThrowsError(
+                try store.update(
+                    entry,
+                    date: TestCalendar.date(2026, 7, 17),
+                    durationMinutes: invalidDuration,
+                    now: TestCalendar.date(2026, 7, 20)
+                )
+            ) {
+                XCTAssertEqual($0 as? EntryValidationError, .nonPositiveDuration)
+            }
+            XCTAssertEqual(entry.workDate, TestCalendar.date(2026, 7, 16))
+            XCTAssertEqual(entry.durationMinutes, 60)
+            XCTAssertEqual(entry.hourlyRateCents, 2_300)
+            XCTAssertEqual(entry.updatedAt, originalUpdatedAt)
+            XCTAssertEqual(entry.earningsCents, 2_300)
+        }
+    }
+
+    func testMovingEntryAcrossPeriodsRecalculatesBothSummariesAndPreservesRate() throws {
+        let (_, store) = try makeStore()
+        let entry = try store.create(
+            date: TestCalendar.date(2026, 7, 16),
+            durationMinutes: 60,
+            hourlyRateCents: 2_300,
+            now: TestCalendar.date(2026, 7, 20)
+        )
+        let oldPeriod = PayPeriod(
+            startDate: TestCalendar.date(2026, 7, 3),
+            endDate: TestCalendar.date(2026, 7, 16),
+            payday: TestCalendar.date(2026, 7, 17)
+        )
+        let newPeriod = PayPeriod(
+            startDate: TestCalendar.date(2026, 7, 17),
+            endDate: TestCalendar.date(2026, 7, 30),
+            payday: TestCalendar.date(2026, 7, 31)
+        )
+
+        XCTAssertEqual(PeriodSummary(entries: try store.entries(in: oldPeriod)).totalMinutes, 60)
+        XCTAssertEqual(PeriodSummary(entries: try store.entries(in: oldPeriod)).totalEarningsCents, 2_300)
+        XCTAssertTrue(try store.entries(in: newPeriod).isEmpty)
+
+        try store.update(
+            entry,
+            date: TestCalendar.date(2026, 7, 17),
+            durationMinutes: 90,
+            now: TestCalendar.date(2026, 7, 20)
+        )
+
+        let oldSummary = PeriodSummary(entries: try store.entries(in: oldPeriod))
+        let newEntries = try store.entries(in: newPeriod)
+        let newSummary = PeriodSummary(entries: newEntries)
+        XCTAssertEqual(oldSummary.totalMinutes, 0)
+        XCTAssertEqual(oldSummary.totalEarningsCents, 0)
+        XCTAssertEqual(newEntries.map(\.id), [entry.id])
+        XCTAssertEqual(newSummary.totalMinutes, 90)
+        XCTAssertEqual(newSummary.totalEarningsCents, 3_450)
+        XCTAssertEqual(entry.hourlyRateCents, 2_300)
     }
 
     func testRejectedUpdateDoesNotMutateEntry() throws {

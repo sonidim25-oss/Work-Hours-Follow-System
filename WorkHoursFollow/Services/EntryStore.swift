@@ -24,6 +24,10 @@ struct EntryStore {
         now: Date
     ) throws -> WorkEntry {
         try validator.validate(
+            durationMinutes: durationMinutes,
+            hourlyRateCents: hourlyRateCents
+        )
+        try validator.validate(
             date: date,
             now: now,
             existingEntries: try allEntries(),
@@ -54,6 +58,7 @@ struct EntryStore {
         durationMinutes: Int,
         now: Date
     ) throws {
+        try validator.validate(durationMinutes: durationMinutes)
         try validator.validate(
             date: date,
             now: now,

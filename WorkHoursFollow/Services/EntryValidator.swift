@@ -1,12 +1,23 @@
 import Foundation
 
 enum EntryValidationError: Error, Equatable {
+    case nonPositiveDuration
+    case nonPositiveHourlyRate
     case futureDate
     case duplicateDate(UUID)
 }
 
 struct EntryValidator {
     let calendar: Calendar
+
+    func validate(durationMinutes: Int, hourlyRateCents: Int? = nil) throws {
+        guard durationMinutes > 0 else {
+            throw EntryValidationError.nonPositiveDuration
+        }
+        if let hourlyRateCents, hourlyRateCents <= 0 {
+            throw EntryValidationError.nonPositiveHourlyRate
+        }
+    }
 
     func validate(
         date: Date,

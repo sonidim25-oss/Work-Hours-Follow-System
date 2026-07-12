@@ -10,7 +10,7 @@
 - iPhone 17 Pro, `E6B7FFEA-E21B-4233-802C-3CF438D9059A`, 402 × 874 points.
 - iPhone SE (3rd generation), `BEE9D40E-FFFA-4E0B-9046-E580E5699695`, 375 × 667 points. This was a disposable Task 9 simulator.
 
-The calendar used the live Toronto date of July 12, 2026. The active period was July 3–16, the next payday was July 17, and July 13 was the first future date exercised in the editor.
+Date-sensitive UI verification uses a `DEBUG`-only fixed clock. Every XCUITest launch includes `--ui-testing-fixed-now` with `UI_TEST_FIXED_NOW=2026-07-12` and `UI_TEST_TIME_ZONE=America/Toronto`. The app interprets that value as local Gregorian start-of-day on July 12, 2026; normal launches without the argument continue to use `AppEnvironment.live`. The active period is therefore reproducibly July 3–16, the next payday is July 17, and July 13 is the first future date exercised in the editor.
 
 ## Automated verification
 
@@ -23,7 +23,7 @@ xcodebuild test -project WorkHoursFollow.xcodeproj -scheme WorkHoursFollow \
   -only-testing:WorkHoursFollowTests
 ```
 
-Result: `47 tests, with 0 failures` and `** TEST SUCCEEDED **`.
+Original Task 9 result: `47 tests, with 0 failures` and `** TEST SUCCEEDED **`. The final-review rerun expanded this to `54 tests, with 0 failures` and `** TEST SUCCEEDED **`.
 
 The complete, nonparallel scheme was then run on iPhone 17 Pro:
 
@@ -33,9 +33,9 @@ xcodebuild test -project WorkHoursFollow.xcodeproj -scheme WorkHoursFollow \
   -derivedDataPath .build/DerivedData -parallel-testing-enabled NO
 ```
 
-Result: `** TEST SUCCEEDED **`. The scheme contains 47 unit tests and four focused XCUITests. The unit tests cover duration, earnings rounding, pay-period boundaries (including July 16/17), validation, persistence rollback, rate snapshots, formatting, and period summaries. The UI tests cover the live period, empty and populated screens, add/edit/delete/duplicate behavior, persistence after process relaunch, deterministic launch isolation, the small-screen layout, and accessibility Dynamic Type.
+Result: `** TEST SUCCEEDED **`. After final review, the scheme contains 54 unit tests and four focused XCUITests. The unit tests cover duration, earnings rounding, pay-period boundaries (including July 16/17), nonpositive persistence-input rejection, cross-period mutation totals, Gregorian default-anchor construction under a non-Gregorian preferred calendar, fixed-clock parsing, persistence rollback, rate snapshots, formatting, and period summaries. The UI tests cover the fixed July period, empty and populated screens, add/edit/delete/duplicate behavior, persistence after process relaunch, deterministic launch isolation, the small-screen layout, and accessibility Dynamic Type.
 
-Every XCUITest begins with the exact `--ui-testing-reset-data` launch argument. In `DEBUG` builds only, the app deletes `WorkEntry` and `AppSettings` records, saves fresh documented defaults, and exposes `ui-test-reset-complete` after the reset finishes. The persistence assertion explicitly removes the argument before relaunching, so it verifies durable state rather than resetting it. A separate UI test seeds an entry and proves a later reset launch returns totals to zero.
+Every XCUITest launch includes the fixed-clock argument and environment values documented above. Initial launches also include `--ui-testing-reset-data`; in `DEBUG` builds only, the app deletes `WorkEntry` and `AppSettings` records, saves fresh documented defaults, and exposes `ui-test-reset-complete` after the reset finishes. The persistence assertion removes only `--ui-testing-reset-data` before relaunching while retaining `--ui-testing-fixed-now` and both environment values, so it verifies durable state under the same deterministic clock. A separate UI test seeds an entry and proves a later reset launch returns totals to zero.
 
 The default and Accessibility Extra Extra Extra Large iPhone SE checks are exactly reproducible with:
 
@@ -44,7 +44,7 @@ xcrun simctl ui BEE9D40E-FFFA-4E0B-9046-E580E5699695 content_size large
 xcodebuild test -project WorkHoursFollow.xcodeproj -scheme WorkHoursFollow \
   -destination 'platform=iOS Simulator,id=BEE9D40E-FFFA-4E0B-9046-E580E5699695' \
   -derivedDataPath .build/DerivedDataSE -parallel-testing-enabled NO \
-  -only-testing:WorkHoursFollowUITests/FunctionalVerticalSliceUITests/testOverviewShowsExpectedLivePeriod
+  -only-testing:WorkHoursFollowUITests/FunctionalVerticalSliceUITests/testOverviewShowsExpectedFixedPeriod
 
 xcrun simctl ui BEE9D40E-FFFA-4E0B-9046-E580E5699695 \
   content_size accessibility-extra-extra-extra-large
@@ -67,7 +67,7 @@ xcodebuild build -project WorkHoursFollow.xcodeproj -scheme WorkHoursFollow \
 
 Result: `** BUILD SUCCEEDED **`.
 
-The resulting app bundle was independently installed and launched with `simctl`; process identifier `48433` was returned. The retained screenshot is the settled first interactive frame, including the **Safe Defaults Restored** alert and enabled **OK** action, rather than a launch placeholder. The retained runtime file is a 0.711-second launch trace (15:29:33.146–15:29:33.857) selected by a five-minute query window. It contains normal UIKit and simulator lifecycle messages, with no app crash, SwiftData failure, or uncaught error.
+The resulting app bundle was independently installed and launched with `simctl`; that launch returned process identifier `48433`. The retained screenshot is the settled first interactive frame, including the **Safe Defaults Restored** alert and enabled **OK** action, rather than a launch placeholder. The retained runtime file records process identifier `42702` in a separate launch and is a 0.711-second trace (15:29:33.146–15:29:33.857) selected by a five-minute query window. PID `42702` is not the PID `48433` independent launch, and the trace is not presented as corresponding to that launch. It contains normal UIKit and simulator lifecycle messages, with no app crash, SwiftData failure, or uncaught error.
 
 ## Simulator acceptance flow
 

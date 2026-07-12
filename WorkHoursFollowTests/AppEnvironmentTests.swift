@@ -2,6 +2,39 @@ import XCTest
 @testable import WorkHoursFollow
 
 final class AppEnvironmentTests: XCTestCase {
+#if DEBUG
+    func testDebugFixedClockUsesRequestedTorontoCalendarDate() throws {
+        let environment = try XCTUnwrap(
+            AppEnvironment.debugLaunchOverride(
+                arguments: ["WorkHoursFollow", "--ui-testing-fixed-now"],
+                environment: [
+                    "UI_TEST_FIXED_NOW": "2026-07-12",
+                    "UI_TEST_TIME_ZONE": "America/Toronto",
+                ]
+            )
+        )
+
+        XCTAssertEqual(environment.calendar.identifier, .gregorian)
+        XCTAssertEqual(environment.calendar.timeZone.identifier, "America/Toronto")
+        XCTAssertEqual(
+            environment.calendar.dateComponents([.year, .month, .day], from: environment.now()),
+            DateComponents(year: 2026, month: 7, day: 12)
+        )
+    }
+
+    func testDebugFixedClockRequiresItsLaunchArgument() {
+        XCTAssertNil(
+            AppEnvironment.debugLaunchOverride(
+                arguments: ["WorkHoursFollow"],
+                environment: [
+                    "UI_TEST_FIXED_NOW": "2026-07-12",
+                    "UI_TEST_TIME_ZONE": "America/Toronto",
+                ]
+            )
+        )
+    }
+#endif
+
     func testDefaultSettingsMatchApprovedValues() {
         let settings = AppEnvironment.defaultSettings(calendar: TestCalendar.toronto)
 
@@ -29,6 +62,26 @@ final class AppEnvironmentTests: XCTestCase {
         )
     }
 
+    func testDefaultAnchorUsesGregorianComponentsInInjectedTimeZone() {
+        var preferredCalendar = Calendar(identifier: .buddhist)
+        preferredCalendar.timeZone = TestCalendar.toronto.timeZone
+        let settings = AppEnvironment.defaultSettings(calendar: preferredCalendar)
+        var gregorian = Calendar(identifier: .gregorian)
+        gregorian.timeZone = preferredCalendar.timeZone
+
+        XCTAssertEqual(
+            gregorian.dateComponents([.year, .month, .day], from: settings.anchorPayday),
+            DateComponents(year: 2026, month: 7, day: 17)
+        )
+
+        let resolution = AppSettingsResolution.resolve(
+            [settings],
+            calendar: preferredCalendar
+        )
+        XCTAssertFalse(resolution.needsRepair)
+        XCTAssertEqual(resolution.effective.anchorPayday, settings.anchorPayday)
+    }
+
     func testRejectsUnsupportedOrUnsafeSettingsValues() {
         let settings = AppEnvironment.defaultSettings(calendar: TestCalendar.toronto)
 
@@ -37,6 +90,9 @@ final class AppEnvironmentTests: XCTestCase {
 
         settings.payPeriodLengthDays = 14
         settings.defaultHourlyRateCents = -1
+        XCTAssertFalse(AppEnvironment.settingsAreValid(settings, calendar: TestCalendar.toronto))
+
+        settings.defaultHourlyRateCents = 0
         XCTAssertFalse(AppEnvironment.settingsAreValid(settings, calendar: TestCalendar.toronto))
 
         settings.defaultHourlyRateCents = 2_300

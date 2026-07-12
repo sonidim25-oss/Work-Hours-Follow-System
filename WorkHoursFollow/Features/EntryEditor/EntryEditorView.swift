@@ -154,6 +154,12 @@ struct EntryEditorView: View {
                     message: Text("Your changes are still here. Please try saving again."),
                     dismissButton: .default(Text("OK"))
                 )
+            case .validation(let message):
+                Alert(
+                    title: Text("Check Work Time"),
+                    message: Text(message),
+                    dismissButton: .default(Text("OK"))
+                )
             }
         }
     }
@@ -375,6 +381,12 @@ struct EntryEditorView: View {
             dismiss()
         } catch EntryValidationError.duplicateDate(let id) {
             presentedAlert = .duplicate(id)
+        } catch EntryValidationError.nonPositiveDuration {
+            presentedAlert = .validation("Enter a work duration greater than zero.")
+        } catch EntryValidationError.nonPositiveHourlyRate {
+            presentedAlert = .validation(
+                "The hourly rate must be greater than zero. Check Settings and try again."
+            )
         } catch {
             presentedAlert = .persistence
         }
@@ -394,6 +406,7 @@ struct EntryEditorView: View {
 private enum EditorAlert: Identifiable {
     case duplicate(UUID)
     case persistence
+    case validation(String)
 
     var id: String {
         switch self {
@@ -401,6 +414,8 @@ private enum EditorAlert: Identifiable {
             "duplicate-\(id.uuidString)"
         case .persistence:
             "persistence"
+        case .validation(let message):
+            "validation-\(message)"
         }
     }
 }

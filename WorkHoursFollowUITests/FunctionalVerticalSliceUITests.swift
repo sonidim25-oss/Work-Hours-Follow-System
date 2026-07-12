@@ -2,11 +2,17 @@ import XCTest
 
 @MainActor
 final class FunctionalVerticalSliceUITests: XCTestCase {
+    private let fixedClockArguments = ["--ui-testing-fixed-now"]
+    private let fixedClockEnvironment = [
+        "UI_TEST_FIXED_NOW": "2026-07-12",
+        "UI_TEST_TIME_ZONE": "America/Toronto",
+    ]
+
     override func setUpWithError() throws {
         continueAfterFailure = false
     }
 
-    func testOverviewShowsExpectedLivePeriod() {
+    func testOverviewShowsExpectedFixedPeriod() {
         let app = launchApp(resetData: true)
         dismissDefaultsNoticeIfNeeded(in: app)
 
@@ -84,7 +90,7 @@ final class FunctionalVerticalSliceUITests: XCTestCase {
         XCTAssertTrue(app.buttons["Wed, Jul 8, 1h 30m, $34.50"].exists)
 
         app.terminate()
-        app.launchArguments = []
+        app.launchArguments = fixedClockArguments
         app.launch()
         app.buttons["Entries"].tap()
         XCTAssertTrue(app.buttons["Wed, Jul 8, 1h 30m, $34.50"].waitForExistence(timeout: 5))
@@ -131,7 +137,7 @@ final class FunctionalVerticalSliceUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["1h 0m"].waitForExistence(timeout: 3))
 
         app.terminate()
-        app.launchArguments = ["--ui-testing-reset-data"]
+        app.launchArguments = fixedClockArguments + ["--ui-testing-reset-data"]
         app.launch()
         XCTAssertTrue(
             app.descendants(matching: .any)["ui-test-reset-complete"]
@@ -143,7 +149,9 @@ final class FunctionalVerticalSliceUITests: XCTestCase {
 
     private func launchApp(resetData: Bool) -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments = resetData ? ["--ui-testing-reset-data"] : []
+        app.launchArguments = fixedClockArguments
+            + (resetData ? ["--ui-testing-reset-data"] : [])
+        app.launchEnvironment = fixedClockEnvironment
         app.launch()
         if resetData {
             XCTAssertTrue(
