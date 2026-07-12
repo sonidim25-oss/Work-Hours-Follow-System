@@ -79,8 +79,16 @@ struct EntryStore {
     }
 
     func delete(_ entry: WorkEntry) throws {
-        context.delete(entry)
-        try context.save()
+        let entryID = entry.id
+        let deletionContext = ModelContext(context.container)
+        deletionContext.autosaveEnabled = false
+        let descriptor = FetchDescriptor<WorkEntry>(
+            predicate: #Predicate { $0.id == entryID }
+        )
+        guard let persistedEntry = try deletionContext.fetch(descriptor).first else { return }
+
+        deletionContext.delete(persistedEntry)
+        try deletionContext.save()
     }
 
     func entries(in period: PayPeriod) throws -> [WorkEntry] {

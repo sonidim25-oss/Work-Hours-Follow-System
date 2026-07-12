@@ -228,6 +228,12 @@ final class EntryStoreTests: XCTestCase {
             hourlyRateCents: 2_300,
             now: now
         )
+        let periodStart = try store.create(
+            date: TestCalendar.date(2026, 7, 3),
+            durationMinutes: 45,
+            hourlyRateCents: 2_300,
+            now: now
+        )
         let newer = try store.create(
             date: TestCalendar.date(2026, 7, 16),
             durationMinutes: 90,
@@ -240,8 +246,14 @@ final class EntryStoreTests: XCTestCase {
             payday: TestCalendar.date(2026, 7, 17)
         )
 
-        XCTAssertEqual(try store.entries(in: period).map(\.id), [newer.id, older.id])
-        XCTAssertEqual(try store.allEntries().map(\.id), [newer.id, older.id, outside.id])
+        XCTAssertEqual(
+            try store.entries(in: period).map(\.id),
+            [newer.id, older.id, periodStart.id]
+        )
+        XCTAssertEqual(
+            try store.allEntries().map(\.id),
+            [newer.id, older.id, periodStart.id, outside.id]
+        )
     }
 
     func testDeletePersistsRemoval() throws {
@@ -252,11 +264,58 @@ final class EntryStoreTests: XCTestCase {
             hourlyRateCents: 2_300,
             now: TestCalendar.date(2026, 7, 11)
         )
+        let unselectedEntry = try store.create(
+            date: TestCalendar.date(2026, 7, 9),
+            durationMinutes: 30,
+            hourlyRateCents: 2_300,
+            now: TestCalendar.date(2026, 7, 11)
+        )
 
         try store.delete(entry)
 
         let verificationContext = ModelContext(container)
-        XCTAssertTrue(try verificationContext.fetch(FetchDescriptor<WorkEntry>()).isEmpty)
+        XCTAssertEqual(
+            try verificationContext.fetch(FetchDescriptor<WorkEntry>()).map(\.id),
+            [unselectedEntry.id]
+        )
+    }
+
+    func testFailedDeleteRetainsEntryAndClearsPendingChanges() throws {
+        let storeURL = FileManager.default.temporaryDirectory
+            .appending(path: "EntryStoreTests-\(UUID().uuidString).sqlite")
+        let schema = Schema([WorkEntry.self, AppSettings.self])
+        let writableConfiguration = ModelConfiguration(schema: schema, url: storeURL)
+        let writableContainer = try ModelContainer(
+            for: schema,
+            configurations: [writableConfiguration]
+        )
+        let writableContext = ModelContext(writableContainer)
+        let entry = WorkEntry(
+            workDate: TestCalendar.date(2026, 7, 10),
+            durationMinutes: 60,
+            hourlyRateCents: 2_300,
+            createdAt: TestCalendar.date(2026, 7, 11),
+            updatedAt: TestCalendar.date(2026, 7, 11)
+        )
+        writableContext.insert(entry)
+        try writableContext.save()
+
+        let readOnlyConfiguration = ModelConfiguration(
+            schema: schema,
+            url: storeURL,
+            allowsSave: false
+        )
+        let container = try ModelContainer(
+            for: schema,
+            configurations: [readOnlyConfiguration]
+        )
+        let context = ModelContext(container)
+        let store = EntryStore(context: context, calendar: TestCalendar.toronto)
+        let persistedEntry = try XCTUnwrap(store.allEntries().first)
+
+        XCTAssertThrowsError(try store.delete(persistedEntry))
+        XCTAssertEqual(try store.allEntries().map(\.id), [persistedEntry.id])
+        XCTAssertFalse(context.hasChanges)
     }
 
     private func makeStore() throws -> (ModelContainer, EntryStore) {

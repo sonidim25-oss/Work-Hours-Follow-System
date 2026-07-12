@@ -20,4 +20,11 @@ struct AppEnvironment: Sendable {
             payPeriodLengthDays: 14
         )
     }
+
+    static func settingsAreValid(_ settings: AppSettings, calendar: Calendar) -> Bool {
+        settings.defaultHourlyRateCents >= 0
+            && !settings.currencyCode.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            && settings.payPeriodLengthDays == 14
+            && calendar.component(.weekday, from: settings.anchorPayday) == 6
+    }
 }

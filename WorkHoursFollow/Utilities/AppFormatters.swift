@@ -16,41 +16,70 @@ enum AppFormatters {
 
     static func periodRange(
         _ period: PayPeriod,
+        calendar appCalendar: Calendar = .current,
         locale: Locale = Locale(identifier: "en_CA")
     ) -> String {
-        let style = Date.FormatStyle.dateTime
+        let style = Date.FormatStyle(
+            locale: locale,
+            calendar: appCalendar,
+            timeZone: appCalendar.timeZone
+        )
             .month(.abbreviated)
             .day()
             .year()
-            .locale(locale)
 
         return "\(period.startDate.formatted(style)) – \(period.endDate.formatted(style))"
     }
 
     static func entryDate(
         _ date: Date,
+        calendar appCalendar: Calendar = .current,
         locale: Locale = Locale(identifier: "en_CA")
     ) -> String {
         date.formatted(
-            .dateTime
+            Date.FormatStyle(
+                locale: locale,
+                calendar: appCalendar,
+                timeZone: appCalendar.timeZone
+            )
                 .weekday(.abbreviated)
                 .month(.abbreviated)
                 .day()
-                .locale(locale)
+        )
+    }
+
+    static func shortDate(
+        _ date: Date,
+        calendar appCalendar: Calendar = .current,
+        locale: Locale = Locale(identifier: "en_CA")
+    ) -> String {
+        date.formatted(
+            Date.FormatStyle(
+                locale: locale,
+                calendar: appCalendar,
+                timeZone: appCalendar.timeZone
+            )
+                .month(.abbreviated)
+                .day()
+                .year()
         )
     }
 
     static func fullEntryDate(
         _ date: Date,
+        calendar appCalendar: Calendar = .current,
         locale: Locale = Locale(identifier: "en_CA")
     ) -> String {
         date.formatted(
-            .dateTime
+            Date.FormatStyle(
+                locale: locale,
+                calendar: appCalendar,
+                timeZone: appCalendar.timeZone
+            )
                 .weekday(.wide)
                 .month(.wide)
                 .day()
                 .year()
-                .locale(locale)
         )
     }
 }
