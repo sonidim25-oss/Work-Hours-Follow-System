@@ -39,4 +39,18 @@ enum AppFormatters {
                 .locale(locale)
         )
     }
+
+    static func fullEntryDate(
+        _ date: Date,
+        locale: Locale = Locale(identifier: "en_CA")
+    ) -> String {
+        date.formatted(
+            .dateTime
+                .weekday(.wide)
+                .month(.wide)
+                .day()
+                .year()
+                .locale(locale)
+        )
+    }
 }

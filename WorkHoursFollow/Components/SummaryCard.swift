@@ -6,12 +6,12 @@ struct SummaryCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: AppSpacing.md) {
-            metric(label: "Total Hours", value: totalTime, valueColor: AppColors.textDark)
+            metric(label: "Total Hours", value: totalTime)
 
             Divider()
                 .overlay(AppColors.textDark.opacity(0.12))
 
-            metric(label: "Total Earned", value: earnings, valueColor: AppColors.gold)
+            metric(label: "Total Earned", value: earnings)
         }
         .padding(AppSpacing.md)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -21,7 +21,7 @@ struct SummaryCard: View {
         .accessibilityElement(children: .combine)
     }
 
-    private func metric(label: String, value: String, valueColor: Color) -> some View {
+    private func metric(label: String, value: String) -> some View {
         VStack(alignment: .leading, spacing: AppSpacing.xs) {
             Text(label)
                 .font(.body)
@@ -30,7 +30,7 @@ struct SummaryCard: View {
             Text(value)
                 .font(AppTypography.metric)
                 .monospacedDigit()
-                .foregroundStyle(valueColor)
+                .foregroundStyle(AppColors.textDark)
                 .fixedSize(horizontal: false, vertical: true)
         }
     }

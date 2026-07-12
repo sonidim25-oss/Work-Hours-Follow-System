@@ -28,4 +28,11 @@ final class AppFormattersTests: XCTestCase {
             "Jul 3, 2026 – Jul 16, 2026"
         )
     }
+
+    func testFormatsFullEntryDateForAccessibility() {
+        XCTAssertEqual(
+            AppFormatters.fullEntryDate(TestCalendar.date(2026, 7, 3), locale: locale),
+            "Friday, July 3, 2026"
+        )
+    }
 }

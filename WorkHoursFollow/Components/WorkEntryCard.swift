@@ -22,7 +22,7 @@ struct WorkEntryCard: View {
                     Text(AppFormatters.currency(cents: entry.earningsCents))
                         .font(.callout.weight(.medium))
                         .monospacedDigit()
-                        .foregroundStyle(AppColors.gold)
+                        .foregroundStyle(AppColors.textDark)
                 }
 
                 Image(systemName: "chevron.right")
@@ -43,9 +43,7 @@ struct WorkEntryCard: View {
     }
 
     private var accessibilityLabel: String {
-        let date = entry.workDate.formatted(
-            .dateTime.weekday(.wide).month(.wide).day().year()
-        )
+        let date = AppFormatters.fullEntryDate(entry.workDate)
         let duration = AppFormatters.duration(entry.durationMinutes)
         let earnings = AppFormatters.currency(cents: entry.earningsCents)
         return "\(date), \(duration), \(earnings)"
