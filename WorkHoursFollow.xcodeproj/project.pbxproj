@@ -21,6 +21,10 @@
 		10000000000000000000000D /* WorkEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000000F /* WorkEntry.swift */; };
 		10000000000000000000000E /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000010 /* AppSettings.swift */; };
 		10000000000000000000000F /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000011 /* AppEnvironment.swift */; };
+		100000000000000000000010 /* EntryValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000012 /* EntryValidatorTests.swift */; };
+		100000000000000000000011 /* EntryValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000013 /* EntryValidator.swift */; };
+		100000000000000000000012 /* EntryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000014 /* EntryStoreTests.swift */; };
+		100000000000000000000013 /* EntryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000015 /* EntryStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +54,10 @@
 		20000000000000000000000F /* WorkEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkEntry.swift; sourceTree = "<group>"; };
 		200000000000000000000010 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		200000000000000000000011 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		200000000000000000000012 /* EntryValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryValidatorTests.swift; sourceTree = "<group>"; };
+		200000000000000000000013 /* EntryValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryValidator.swift; sourceTree = "<group>"; };
+		200000000000000000000014 /* EntryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryStoreTests.swift; sourceTree = "<group>"; };
+		200000000000000000000015 /* EntryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +115,8 @@
 				20000000000000000000000A /* TestCalendar.swift */,
 				20000000000000000000000B /* PayPeriodCalculatorTests.swift */,
 				20000000000000000000000E /* AppEnvironmentTests.swift */,
+				200000000000000000000012 /* EntryValidatorTests.swift */,
+				200000000000000000000014 /* EntryStoreTests.swift */,
 			);
 			path = WorkHoursFollowTests;
 			sourceTree = "<group>";
@@ -126,6 +136,8 @@
 				200000000000000000000007 /* DurationService.swift */,
 				200000000000000000000009 /* EarningsCalculator.swift */,
 				20000000000000000000000D /* PayPeriodCalculator.swift */,
+				200000000000000000000013 /* EntryValidator.swift */,
+				200000000000000000000015 /* EntryStore.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -247,6 +259,8 @@
 				10000000000000000000000D /* WorkEntry.swift in Sources */,
 				10000000000000000000000E /* AppSettings.swift in Sources */,
 				10000000000000000000000F /* AppEnvironment.swift in Sources */,
+				100000000000000000000011 /* EntryValidator.swift in Sources */,
+				100000000000000000000013 /* EntryStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +273,8 @@
 				100000000000000000000008 /* TestCalendar.swift in Sources */,
 				100000000000000000000009 /* PayPeriodCalculatorTests.swift in Sources */,
 				10000000000000000000000C /* AppEnvironmentTests.swift in Sources */,
+				100000000000000000000010 /* EntryValidatorTests.swift in Sources */,
+				100000000000000000000012 /* EntryStoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
