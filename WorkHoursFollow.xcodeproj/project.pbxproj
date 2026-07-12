@@ -17,6 +17,10 @@
 		100000000000000000000009 /* PayPeriodCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000000B /* PayPeriodCalculatorTests.swift */; };
 		10000000000000000000000A /* PayPeriod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000000C /* PayPeriod.swift */; };
 		10000000000000000000000B /* PayPeriodCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000000D /* PayPeriodCalculator.swift */; };
+		10000000000000000000000C /* AppEnvironmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000000E /* AppEnvironmentTests.swift */; };
+		10000000000000000000000D /* WorkEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000000F /* WorkEntry.swift */; };
+		10000000000000000000000E /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000010 /* AppSettings.swift */; };
+		10000000000000000000000F /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000011 /* AppEnvironment.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +46,10 @@
 		20000000000000000000000B /* PayPeriodCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayPeriodCalculatorTests.swift; sourceTree = "<group>"; };
 		20000000000000000000000C /* PayPeriod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayPeriod.swift; sourceTree = "<group>"; };
 		20000000000000000000000D /* PayPeriodCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayPeriodCalculator.swift; sourceTree = "<group>"; };
+		20000000000000000000000E /* AppEnvironmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironmentTests.swift; sourceTree = "<group>"; };
+		20000000000000000000000F /* WorkEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkEntry.swift; sourceTree = "<group>"; };
+		200000000000000000000010 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		200000000000000000000011 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +94,7 @@
 			children = (
 				200000000000000000000001 /* WorkHoursFollowApp.swift */,
 				200000000000000000000002 /* AppTabView.swift */,
+				200000000000000000000011 /* AppEnvironment.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -97,6 +106,7 @@
 				200000000000000000000008 /* EarningsCalculatorTests.swift */,
 				20000000000000000000000A /* TestCalendar.swift */,
 				20000000000000000000000B /* PayPeriodCalculatorTests.swift */,
+				20000000000000000000000E /* AppEnvironmentTests.swift */,
 			);
 			path = WorkHoursFollowTests;
 			sourceTree = "<group>";
@@ -124,6 +134,8 @@
 			isa = PBXGroup;
 			children = (
 				20000000000000000000000C /* PayPeriod.swift */,
+				20000000000000000000000F /* WorkEntry.swift */,
+				200000000000000000000010 /* AppSettings.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -232,6 +244,9 @@
 				100000000000000000000007 /* EarningsCalculator.swift in Sources */,
 				10000000000000000000000A /* PayPeriod.swift in Sources */,
 				10000000000000000000000B /* PayPeriodCalculator.swift in Sources */,
+				10000000000000000000000D /* WorkEntry.swift in Sources */,
+				10000000000000000000000E /* AppSettings.swift in Sources */,
+				10000000000000000000000F /* AppEnvironment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +258,7 @@
 				100000000000000000000006 /* EarningsCalculatorTests.swift in Sources */,
 				100000000000000000000008 /* TestCalendar.swift in Sources */,
 				100000000000000000000009 /* PayPeriodCalculatorTests.swift in Sources */,
+				10000000000000000000000C /* AppEnvironmentTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

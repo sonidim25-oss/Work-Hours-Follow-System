@@ -14,6 +14,8 @@ enum AppTab: Hashable, CaseIterable {
 }
 
 struct AppTabView: View {
+    let environment: AppEnvironment
+
     var body: some View {
         Text(AppTab.overview.title)
     }
