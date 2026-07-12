@@ -37,9 +37,15 @@ struct EntryStore {
             createdAt: now,
             updatedAt: now
         )
-        context.insert(entry)
-        try context.save()
-        return entry
+        let creationContext = ModelContext(context.container)
+        creationContext.autosaveEnabled = false
+        creationContext.insert(entry)
+        try creationContext.save()
+
+        guard let persistedEntry = try allEntries().first(where: { $0.id == entry.id }) else {
+            throw EntryStoreError.createdEntryUnavailable
+        }
+        return persistedEntry
     }
 
     func update(
@@ -55,10 +61,21 @@ struct EntryStore {
             excluding: entry.id
         )
 
+        let originalDate = entry.workDate
+        let originalDurationMinutes = entry.durationMinutes
+        let originalUpdatedAt = entry.updatedAt
         entry.workDate = calendar.startOfDay(for: date)
         entry.durationMinutes = durationMinutes
         entry.updatedAt = now
-        try context.save()
+        do {
+            try context.save()
+        } catch {
+            entry.workDate = originalDate
+            entry.durationMinutes = originalDurationMinutes
+            entry.updatedAt = originalUpdatedAt
+            context.rollback()
+            throw error
+        }
     }
 
     func delete(_ entry: WorkEntry) throws {
@@ -69,4 +86,8 @@ struct EntryStore {
     func entries(in period: PayPeriod) throws -> [WorkEntry] {
         try allEntries().filter { period.contains($0.workDate, calendar: calendar) }
     }
+}
+
+private enum EntryStoreError: Error {
+    case createdEntryUnavailable
 }

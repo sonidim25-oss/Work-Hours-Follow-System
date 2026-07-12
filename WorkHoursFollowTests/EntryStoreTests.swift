@@ -43,6 +43,38 @@ final class EntryStoreTests: XCTestCase {
         XCTAssertTrue(try store.allEntries().isEmpty)
     }
 
+    func testFailedCreateRemovesUnsavedEntryFromContext() throws {
+        let storeURL = FileManager.default.temporaryDirectory
+            .appending(path: "EntryStoreTests-\(UUID().uuidString).sqlite")
+        let schema = Schema([WorkEntry.self, AppSettings.self])
+        let writableConfiguration = ModelConfiguration(schema: schema, url: storeURL)
+        _ = try ModelContainer(for: schema, configurations: [writableConfiguration])
+
+        let configuration = ModelConfiguration(
+            schema: schema,
+            url: storeURL,
+            allowsSave: false
+        )
+        let container = try ModelContainer(
+            for: schema,
+            configurations: [configuration]
+        )
+        let context = ModelContext(container)
+        let store = EntryStore(context: context, calendar: TestCalendar.toronto)
+
+        XCTAssertThrowsError(
+            try store.create(
+                date: TestCalendar.date(2026, 7, 10),
+                durationMinutes: 60,
+                hourlyRateCents: 2_300,
+                now: TestCalendar.date(2026, 7, 11)
+            )
+        )
+        XCTAssertTrue(context.insertedModelsArray.isEmpty)
+        XCTAssertFalse(context.hasChanges)
+        XCTAssertTrue(try store.allEntries().isEmpty)
+    }
+
     func testDuplicateCreateThrowsAndLeavesExistingEntry() throws {
         let (_, store) = try makeStore()
         let original = try store.create(
@@ -129,6 +161,56 @@ final class EntryStoreTests: XCTestCase {
         XCTAssertEqual(entry.durationMinutes, 60)
         XCTAssertEqual(entry.hourlyRateCents, 2_500)
         XCTAssertEqual(entry.updatedAt, originalUpdatedAt)
+    }
+
+    func testFailedUpdateRestoresEntryAndContext() throws {
+        let storeURL = FileManager.default.temporaryDirectory
+            .appending(path: "EntryStoreTests-\(UUID().uuidString).sqlite")
+        let schema = Schema([WorkEntry.self, AppSettings.self])
+        let writableConfiguration = ModelConfiguration(schema: schema, url: storeURL)
+        let writableContainer = try ModelContainer(
+            for: schema,
+            configurations: [writableConfiguration]
+        )
+        let writableContext = ModelContext(writableContainer)
+        let originalDate = TestCalendar.date(2026, 7, 10)
+        let originalUpdatedAt = TestCalendar.date(2026, 7, 11)
+        writableContext.insert(
+            WorkEntry(
+                workDate: originalDate,
+                durationMinutes: 60,
+                hourlyRateCents: 2_300,
+                createdAt: originalUpdatedAt,
+                updatedAt: originalUpdatedAt
+            )
+        )
+        try writableContext.save()
+
+        let readOnlyConfiguration = ModelConfiguration(
+            schema: schema,
+            url: storeURL,
+            allowsSave: false
+        )
+        let container = try ModelContainer(
+            for: schema,
+            configurations: [readOnlyConfiguration]
+        )
+        let context = ModelContext(container)
+        let store = EntryStore(context: context, calendar: TestCalendar.toronto)
+        let entry = try XCTUnwrap(store.allEntries().first)
+
+        XCTAssertThrowsError(
+            try store.update(
+                entry,
+                date: TestCalendar.date(2026, 7, 9),
+                durationMinutes: 120,
+                now: TestCalendar.date(2026, 7, 12)
+            )
+        )
+        XCTAssertEqual(entry.workDate, originalDate)
+        XCTAssertEqual(entry.durationMinutes, 60)
+        XCTAssertEqual(entry.updatedAt, originalUpdatedAt)
+        XCTAssertFalse(context.hasChanges)
     }
 
     func testEntriesInPeriodAreFilteredAndSortedNewestFirst() throws {

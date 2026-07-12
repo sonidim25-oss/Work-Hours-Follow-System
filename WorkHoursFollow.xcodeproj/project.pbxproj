@@ -34,6 +34,8 @@
 		10000000000000000000001A /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000001C /* PrimaryButton.swift */; };
 		10000000000000000000001B /* SummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000001D /* SummaryCard.swift */; };
 		10000000000000000000001C /* WorkEntryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000001E /* WorkEntryCard.swift */; };
+		10000000000000000000001D /* EntryEditorStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20000000000000000000001F /* EntryEditorStateTests.swift */; };
+		10000000000000000000001E /* EntryEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000020 /* EntryEditorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +78,8 @@
 		20000000000000000000001C /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
 		20000000000000000000001D /* SummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryCard.swift; sourceTree = "<group>"; };
 		20000000000000000000001E /* WorkEntryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkEntryCard.swift; sourceTree = "<group>"; };
+		20000000000000000000001F /* EntryEditorStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryEditorStateTests.swift; sourceTree = "<group>"; };
+		200000000000000000000020 /* EntryEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryEditorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +118,7 @@
 				700000000000000000000008 /* Utilities */,
 				700000000000000000000009 /* DesignSystem */,
 				70000000000000000000000A /* Components */,
+				70000000000000000000000B /* Features */,
 			);
 			path = WorkHoursFollow;
 			sourceTree = "<group>";
@@ -139,6 +144,7 @@
 				200000000000000000000012 /* EntryValidatorTests.swift */,
 				200000000000000000000014 /* EntryStoreTests.swift */,
 				200000000000000000000016 /* AppFormattersTests.swift */,
+				20000000000000000000001F /* EntryEditorStateTests.swift */,
 			);
 			path = WorkHoursFollowTests;
 			sourceTree = "<group>";
@@ -172,6 +178,22 @@
 				200000000000000000000010 /* AppSettings.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		70000000000000000000000B /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				70000000000000000000000C /* EntryEditor */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		70000000000000000000000C /* EntryEditor */ = {
+			isa = PBXGroup;
+			children = (
+				200000000000000000000020 /* EntryEditorView.swift */,
+			);
+			path = EntryEditor;
 			sourceTree = "<group>";
 		};
 		700000000000000000000008 /* Utilities */ = {
@@ -320,6 +342,7 @@
 				10000000000000000000001A /* PrimaryButton.swift in Sources */,
 				10000000000000000000001B /* SummaryCard.swift in Sources */,
 				10000000000000000000001C /* WorkEntryCard.swift in Sources */,
+				10000000000000000000001E /* EntryEditorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,6 +358,7 @@
 				100000000000000000000010 /* EntryValidatorTests.swift in Sources */,
 				100000000000000000000012 /* EntryStoreTests.swift in Sources */,
 				100000000000000000000014 /* AppFormattersTests.swift in Sources */,
+				10000000000000000000001D /* EntryEditorStateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
