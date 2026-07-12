@@ -29,6 +29,20 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "500000000000000000000003"
+               BuildableName = "WorkHoursFollowUITests.xctest"
+               BlueprintName = "WorkHoursFollowUITests"
+               ReferencedContainer = "container:WorkHoursFollow.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "500000000000000000000002"
                BuildableName = "WorkHoursFollowTests.xctest"
                BlueprintName = "WorkHoursFollowTests"
@@ -52,6 +66,17 @@
                BlueprintIdentifier = "500000000000000000000002"
                BuildableName = "WorkHoursFollowTests.xctest"
                BlueprintName = "WorkHoursFollowTests"
+               ReferencedContainer = "container:WorkHoursFollow.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "500000000000000000000003"
+               BuildableName = "WorkHoursFollowUITests.xctest"
+               BlueprintName = "WorkHoursFollowUITests"
                ReferencedContainer = "container:WorkHoursFollow.xcodeproj">
             </BuildableReference>
          </TestableReference>

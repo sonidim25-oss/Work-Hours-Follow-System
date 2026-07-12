@@ -1,17 +1,17 @@
 # Current Sprint
 
-[ ] Build navigation
+[x] Build navigation
 
-[ ] Current Period Screen
+[x] Current Period Screen
 
-[ ] Add Entry
+[x] Add Entry
 
-[ ] Edit Entry
+[x] Edit Entry
 
-[ ] Delete Entry
+[x] Delete Entry
 
 [ ] History
 
 [ ] Settings
 
-[ ] Tests
+[x] Tests
