@@ -36,7 +36,7 @@ final class AppEnvironmentTests: XCTestCase {
 #endif
 
     func testDefaultSettingsMatchApprovedValues() {
-        let settings = AppEnvironment.defaultSettings(calendar: TestCalendar.toronto)
+        let settings = AppEnvironment.defaultSettings(calendar: TestCalendar.toronto, now: TestCalendar.date(2026, 7, 17))
 
         XCTAssertEqual(settings.defaultHourlyRateCents, 2300)
         XCTAssertEqual(settings.currencyCode, "CAD")
@@ -45,7 +45,7 @@ final class AppEnvironmentTests: XCTestCase {
     }
 
     func testOnlyDocumentedSettingsShapeIsValid() {
-        let settings = AppEnvironment.defaultSettings(calendar: TestCalendar.toronto)
+        let settings = AppEnvironment.defaultSettings(calendar: TestCalendar.toronto, now: TestCalendar.date(2026, 7, 17))
         XCTAssertTrue(
             AppEnvironment.settingsAreValid(
                 settings,
@@ -65,7 +65,7 @@ final class AppEnvironmentTests: XCTestCase {
     func testDefaultAnchorUsesGregorianComponentsInInjectedTimeZone() {
         var preferredCalendar = Calendar(identifier: .buddhist)
         preferredCalendar.timeZone = TestCalendar.toronto.timeZone
-        let settings = AppEnvironment.defaultSettings(calendar: preferredCalendar)
+        let settings = AppEnvironment.defaultSettings(calendar: preferredCalendar, now: TestCalendar.date(2026, 7, 17))
         var gregorian = Calendar(identifier: .gregorian)
         gregorian.timeZone = preferredCalendar.timeZone
 
@@ -76,14 +76,15 @@ final class AppEnvironmentTests: XCTestCase {
 
         let resolution = AppSettingsResolution.resolve(
             [settings],
-            calendar: preferredCalendar
+            calendar: preferredCalendar,
+            now: TestCalendar.date(2026, 7, 17)
         )
         XCTAssertFalse(resolution.needsRepair)
         XCTAssertEqual(resolution.effective.anchorPayday, settings.anchorPayday)
     }
 
     func testRejectsUnsupportedOrUnsafeSettingsValues() {
-        let settings = AppEnvironment.defaultSettings(calendar: TestCalendar.toronto)
+        let settings = AppEnvironment.defaultSettings(calendar: TestCalendar.toronto, now: TestCalendar.date(2026, 7, 17))
 
         settings.payPeriodLengthDays = 7
         XCTAssertFalse(AppEnvironment.settingsAreValid(settings, calendar: TestCalendar.toronto))
@@ -103,7 +104,8 @@ final class AppEnvironmentTests: XCTestCase {
     func testSettingsResolutionUsesDefaultsWhenSettingsAreMissing() {
         let resolution = AppSettingsResolution.resolve(
             [],
-            calendar: TestCalendar.toronto
+            calendar: TestCalendar.toronto,
+            now: TestCalendar.date(2026, 7, 17)
         )
 
         XCTAssertTrue(resolution.needsRepair)
@@ -115,7 +117,8 @@ final class AppEnvironmentTests: XCTestCase {
 
         let resolution = AppSettingsResolution.resolve(
             [settings],
-            calendar: TestCalendar.toronto
+            calendar: TestCalendar.toronto,
+            now: TestCalendar.date(2026, 7, 17)
         )
 
         XCTAssertFalse(resolution.needsRepair)
@@ -130,7 +133,8 @@ final class AppEnvironmentTests: XCTestCase {
 
         let resolution = AppSettingsResolution.resolve(
             [invalidSettings],
-            calendar: TestCalendar.toronto
+            calendar: TestCalendar.toronto,
+            now: TestCalendar.date(2026, 7, 17)
         )
 
         XCTAssertTrue(resolution.needsRepair)
@@ -140,7 +144,8 @@ final class AppEnvironmentTests: XCTestCase {
     func testSettingsResolutionUsesDefaultsWhenSettingsAreDuplicated() {
         let resolution = AppSettingsResolution.resolve(
             [validSettings(rate: 3_100), validSettings(rate: 4_200)],
-            calendar: TestCalendar.toronto
+            calendar: TestCalendar.toronto,
+            now: TestCalendar.date(2026, 7, 17)
         )
 
         XCTAssertTrue(resolution.needsRepair)
@@ -150,13 +155,14 @@ final class AppEnvironmentTests: XCTestCase {
     func testRepairFailureKeepsTheSameEffectiveDefaultValues() {
         let resolutionBeforeRepair = AppSettingsResolution.resolve(
             [validSettings(rate: 3_100), validSettings(rate: 4_200)],
-            calendar: TestCalendar.toronto
+            calendar: TestCalendar.toronto,
+            now: TestCalendar.date(2026, 7, 17)
         )
 
         XCTAssertEqual(resolutionBeforeRepair.effective, approvedSettingsValues)
         XCTAssertEqual(
             resolutionBeforeRepair.effective,
-            AppSettingsResolution.resolve([], calendar: TestCalendar.toronto).effective
+            AppSettingsResolution.resolve([], calendar: TestCalendar.toronto, now: TestCalendar.date(2026, 7, 17)).effective
         )
     }
 

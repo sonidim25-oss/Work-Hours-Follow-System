@@ -8,22 +8,24 @@ final class AppSettings {
     var anchorPayday: Date
     var payPeriodLengthDays: Int
 
-    /// A static, hardcoded default Friday used only for initial app seeding on first run.
+    /// Computes a sensible default anchor payday (the next Friday)
+    /// for initial app seeding on first run.
     /// The user is expected to configure their actual anchor payday in Settings.
-    static var defaultAnchorPayday: Date {
+    static func defaultAnchorPayday(now: Date, calendar: Calendar) -> Date {
         var gregorian = Calendar(identifier: .gregorian)
-        return gregorian.date(from: DateComponents(year: 2026, month: 7, day: 17))!
-    }
-
-    static var defaults: AppSettings {
-        AppSettings()
+        gregorian.timeZone = calendar.timeZone
+        
+        let startOfToday = gregorian.startOfDay(for: now)
+        let currentWeekday = gregorian.component(.weekday, from: startOfToday)
+        let daysToAdd = (6 - currentWeekday + 7) % 7
+        return gregorian.date(byAdding: .day, value: daysToAdd, to: startOfToday)!
     }
 
     /// - Note: Settings are typically seeded. `anchorPayday` MUST be a Friday.
     init(
         defaultHourlyRateCents: Int = 2300,
         currencyCode: String = "CAD",
-        anchorPayday: Date = AppSettings.defaultAnchorPayday,
+        anchorPayday: Date,
         payPeriodLengthDays: Int = 14
     ) {
         self.defaultHourlyRateCents = defaultHourlyRateCents

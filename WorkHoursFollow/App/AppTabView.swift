@@ -101,7 +101,7 @@ struct AppTabView: View {
     }
 
     private var settingsResolution: AppSettingsResolution {
-        AppSettingsResolution.resolve(settings, calendar: environment.calendar)
+        AppSettingsResolution.resolve(settings, calendar: environment.calendar, now: environment.now())
     }
 
     private var effectiveSettings: EffectiveAppSettings {
@@ -123,7 +123,7 @@ struct AppTabView: View {
         do {
             try modelContext.fetch(FetchDescriptor<WorkEntry>()).forEach(modelContext.delete)
             try modelContext.fetch(FetchDescriptor<AppSettings>()).forEach(modelContext.delete)
-            modelContext.insert(AppEnvironment.defaultSettings(calendar: environment.calendar))
+            modelContext.insert(AppEnvironment.defaultSettings(calendar: environment.calendar, now: environment.now()))
             try modelContext.save()
             uiTestResetComplete = true
         } catch {
@@ -137,7 +137,7 @@ struct AppTabView: View {
         guard settingsResolution.needsRepair else { return }
 
         settings.forEach { modelContext.delete($0) }
-        modelContext.insert(AppEnvironment.defaultSettings(calendar: environment.calendar))
+        modelContext.insert(AppEnvironment.defaultSettings(calendar: environment.calendar, now: environment.now()))
 
         do {
             try modelContext.save()

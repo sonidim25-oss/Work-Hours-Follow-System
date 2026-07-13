@@ -32,7 +32,7 @@ struct AppSettingsResolution {
     let effective: EffectiveAppSettings
     let needsRepair: Bool
 
-    static func resolve(_ settings: [AppSettings], calendar: Calendar) -> Self {
+    static func resolve(_ settings: [AppSettings], calendar: Calendar, now: Date) -> Self {
         if settings.count == 1,
            let onlySettings = settings.first,
            AppEnvironment.settingsAreValid(onlySettings, calendar: calendar) {
@@ -40,7 +40,7 @@ struct AppSettingsResolution {
         }
 
         return Self(
-            effective: EffectiveAppSettings(AppEnvironment.defaultSettings(calendar: calendar)),
+            effective: EffectiveAppSettings(AppEnvironment.defaultSettings(calendar: calendar, now: now)),
             needsRepair: true
         )
     }
@@ -86,16 +86,8 @@ struct AppEnvironment: Sendable {
     }
 #endif
 
-    static func defaultSettings(calendar: Calendar) -> AppSettings {
-        var gregorian = Calendar(identifier: .gregorian)
-        gregorian.timeZone = calendar.timeZone
-        gregorian.locale = calendar.locale
-        guard let anchorPayday = gregorian.date(
-            from: DateComponents(year: 2026, month: 7, day: 17)
-        ) else {
-            preconditionFailure("The default anchor payday must be a valid calendar date")
-        }
-
+    static func defaultSettings(calendar: Calendar, now: Date) -> AppSettings {
+        let anchorPayday = AppSettings.defaultAnchorPayday(now: now, calendar: calendar)
         return AppSettings(anchorPayday: anchorPayday)
     }
 
