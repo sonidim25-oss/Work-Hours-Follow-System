@@ -102,9 +102,11 @@ struct AppEnvironment: Sendable {
     static func settingsAreValid(_ settings: AppSettings, calendar: Calendar) -> Bool {
         var gregorian = Calendar(identifier: .gregorian)
         gregorian.timeZone = calendar.timeZone
+        
+        let anchor = gregorian.startOfDay(for: settings.anchorPayday)
         return settings.defaultHourlyRateCents > 0
             && !settings.currencyCode.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             && settings.payPeriodLengthDays == 14
-            && gregorian.component(.weekday, from: settings.anchorPayday) == 6
+            && gregorian.component(.weekday, from: anchor) == 6
     }
 }

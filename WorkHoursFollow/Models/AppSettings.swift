@@ -46,9 +46,11 @@ final class AppSettings {
     func updateAnchorPayday(to date: Date, calendar: Calendar) throws {
         var gregorian = Calendar(identifier: .gregorian)
         gregorian.timeZone = calendar.timeZone
-        guard gregorian.component(.weekday, from: date) == 6 else {
+        
+        let anchor = gregorian.startOfDay(for: date)
+        guard gregorian.component(.weekday, from: anchor) == 6 else {
             throw SettingsValidationError.anchorNotFriday
         }
-        self.anchorPayday = date
+        self.anchorPayday = anchor
     }
 }
