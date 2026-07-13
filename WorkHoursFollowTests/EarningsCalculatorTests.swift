@@ -3,25 +3,25 @@ import XCTest
 
 final class EarningsCalculatorTests: XCTestCase {
     func testRequiredExample() {
-        XCTAssertEqual(EarningsCalculator.earningsCents(durationMinutes: 612, hourlyRateCents: 2300), 23_460)
+        XCTAssertEqual(try! EarningsCalculator.earningsCents(durationMinutes: 612, hourlyRateCents: 2300), 23_460)
     }
 
     func testRemainderBelowHalfRoundsDown() {
-        XCTAssertEqual(EarningsCalculator.earningsCents(durationMinutes: 1, hourlyRateCents: 29), 0)
+        XCTAssertEqual(try! EarningsCalculator.earningsCents(durationMinutes: 1, hourlyRateCents: 29), 0)
     }
 
     func testHalfCentRoundsUp() {
-        XCTAssertEqual(EarningsCalculator.earningsCents(durationMinutes: 1, hourlyRateCents: 30), 1)
+        XCTAssertEqual(try! EarningsCalculator.earningsCents(durationMinutes: 1, hourlyRateCents: 30), 1)
     }
 
-    func testNegativeInputsReturnZero() {
-        XCTAssertEqual(EarningsCalculator.earningsCents(durationMinutes: -1, hourlyRateCents: 2300), 0)
-        XCTAssertEqual(EarningsCalculator.earningsCents(durationMinutes: 612, hourlyRateCents: -1), 0)
-        XCTAssertEqual(EarningsCalculator.earningsCents(durationMinutes: -10, hourlyRateCents: -20), 0)
+    func testNegativeInputsThrow() {
+        XCTAssertThrowsError(try EarningsCalculator.earningsCents(durationMinutes: -1, hourlyRateCents: 2300))
+        XCTAssertThrowsError(try EarningsCalculator.earningsCents(durationMinutes: 612, hourlyRateCents: -1))
+        XCTAssertThrowsError(try EarningsCalculator.earningsCents(durationMinutes: -10, hourlyRateCents: -20))
     }
 
-    func testExtremeInputsClampToIntMax() {
-        XCTAssertEqual(EarningsCalculator.earningsCents(durationMinutes: Int.max, hourlyRateCents: Int.max), Int.max)
-        XCTAssertEqual(EarningsCalculator.earningsCents(durationMinutes: Int.max / 2, hourlyRateCents: Int.max / 2), Int.max)
+    func testExtremeInputsThrowOverflow() {
+        XCTAssertThrowsError(try EarningsCalculator.earningsCents(durationMinutes: Int.max, hourlyRateCents: Int.max))
+        XCTAssertThrowsError(try EarningsCalculator.earningsCents(durationMinutes: Int.max / 2, hourlyRateCents: Int.max / 2))
     }
 }

@@ -7,18 +7,22 @@ enum EarningsCalculator {
         }
     }
 
+    enum CalculationError: Error, Equatable {
+        case negativeInput
+        case overflow
+    }
+
     /// Computes the total earnings in cents for a given duration and hourly rate.
     ///
-    /// - Returns: The calculated earnings. If negative inputs are provided, returns `0`.
-    ///   If the calculation overflows the maximum representable integer, the result
-    ///   is safely clamped to `Int.max` to prevent a crash, indicating an overflow.
-    static func earningsCents(durationMinutes: Int, hourlyRateCents: Int) -> Int {
+    /// - Throws: `CalculationError.negativeInput` if either input is negative.
+    ///           `CalculationError.overflow` if the result exceeds `Int.max`.
+    static func earningsCents(durationMinutes: Int, hourlyRateCents: Int) throws -> Int {
         guard durationMinutes >= 0 && hourlyRateCents >= 0 else {
-            return 0
+            throw CalculationError.negativeInput
         }
         let (numerator, overflow) = Int64(durationMinutes).multipliedReportingOverflow(by: Int64(hourlyRateCents))
         guard !overflow else {
-            return Int.max
+            throw CalculationError.overflow
         }
         
         let quotient = numerator / 60
@@ -26,7 +30,7 @@ enum EarningsCalculator {
         let total = RoundingRule.apply(quotient: quotient, remainder: remainder)
         
         guard total <= Int64(Int.max) else {
-            return Int.max
+            throw CalculationError.overflow
         }
         
         return Int(total)
