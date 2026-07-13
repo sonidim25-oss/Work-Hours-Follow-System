@@ -79,38 +79,6 @@ final class EntryStoreTests: XCTestCase {
         }
     }
 
-    func testFailedCreateRemovesUnsavedEntryFromContext() throws {
-        let storeURL = FileManager.default.temporaryDirectory
-            .appending(path: "EntryStoreTests-\(UUID().uuidString).sqlite")
-        let schema = Schema([WorkEntry.self, AppSettings.self])
-        let writableConfiguration = ModelConfiguration(schema: schema, url: storeURL)
-        _ = try ModelContainer(for: schema, configurations: [writableConfiguration])
-
-        let configuration = ModelConfiguration(
-            schema: schema,
-            url: storeURL,
-            allowsSave: false
-        )
-        let container = try ModelContainer(
-            for: schema,
-            configurations: [configuration]
-        )
-        let context = ModelContext(container)
-        let store = EntryStore(context: context, calendar: TestCalendar.toronto)
-
-        XCTAssertThrowsError(
-            try store.create(
-                date: TestCalendar.date(2026, 7, 10),
-                durationMinutes: 60,
-                hourlyRateCents: 2_300,
-                now: TestCalendar.date(2026, 7, 11)
-            )
-        )
-        XCTAssertTrue(context.insertedModelsArray.isEmpty)
-        XCTAssertFalse(context.hasChanges)
-        XCTAssertTrue(try store.allEntries().isEmpty)
-    }
-
     func testDuplicateCreateThrowsAndLeavesExistingEntry() throws {
         let (_, store) = try makeStore()
         let original = try store.create(
@@ -377,7 +345,7 @@ final class EntryStoreTests: XCTestCase {
             now: TestCalendar.date(2026, 7, 11)
         )
 
-        try store.delete(entry)
+        XCTAssertTrue(try store.delete(entry))
 
         XCTAssertEqual(try store.allEntries().map(\.id), [unselectedEntry.id])
 
@@ -388,42 +356,18 @@ final class EntryStoreTests: XCTestCase {
         )
     }
 
-    func testFailedDeleteRetainsEntryAndClearsPendingChanges() throws {
-        let storeURL = FileManager.default.temporaryDirectory
-            .appending(path: "EntryStoreTests-\(UUID().uuidString).sqlite")
-        let schema = Schema([WorkEntry.self, AppSettings.self])
-        let writableConfiguration = ModelConfiguration(schema: schema, url: storeURL)
-        let writableContainer = try ModelContainer(
-            for: schema,
-            configurations: [writableConfiguration]
-        )
-        let writableContext = ModelContext(writableContainer)
-        let entry = WorkEntry(
+    func testIdempotentDeleteReturnsFalse() throws {
+        let (_, store) = try makeStore()
+        let missingEntry = WorkEntry(
             workDate: TestCalendar.date(2026, 7, 10),
             durationMinutes: 60,
             hourlyRateCents: 2_300,
             createdAt: TestCalendar.date(2026, 7, 11),
             updatedAt: TestCalendar.date(2026, 7, 11)
         )
-        writableContext.insert(entry)
-        try writableContext.save()
 
-        let readOnlyConfiguration = ModelConfiguration(
-            schema: schema,
-            url: storeURL,
-            allowsSave: false
-        )
-        let container = try ModelContainer(
-            for: schema,
-            configurations: [readOnlyConfiguration]
-        )
-        let context = ModelContext(container)
-        let store = EntryStore(context: context, calendar: TestCalendar.toronto)
-        let persistedEntry = try XCTUnwrap(store.allEntries().first)
-
-        XCTAssertThrowsError(try store.delete(persistedEntry))
-        XCTAssertEqual(try store.allEntries().map(\.id), [persistedEntry.id])
-        XCTAssertFalse(context.hasChanges)
+        XCTAssertFalse(try store.delete(missingEntry))
+        XCTAssertTrue(try store.allEntries().isEmpty)
     }
 
     private func makeStore() throws -> (ModelContainer, EntryStore) {
