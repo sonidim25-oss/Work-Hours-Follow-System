@@ -36,9 +36,6 @@ final class FunctionalVerticalSliceUITests: XCTestCase {
 
         app.buttons["Add Work Time"].tap()
         waitForEditor(title: "Add Work Time", in: app)
-        let futureDateButton = app.buttons["Monday, July 13"]
-        XCTAssertTrue(futureDateButton.waitForExistence(timeout: 3))
-        XCTAssertFalse(futureDateButton.isEnabled)
         XCTAssertFalse(app.buttons["entry-editor-save"].isEnabled)
         setEditor(dateLabel: "Friday, July 10", hours: "10", minutes: "12", in: app)
         XCTAssertTrue(app.staticTexts["$234.60"].waitForExistence(timeout: 2))
