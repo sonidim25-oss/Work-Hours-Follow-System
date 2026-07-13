@@ -26,10 +26,9 @@ struct EntryStore {
         return try context.fetch(descriptor)
     }
 
-    /// We use a dedicated child context for creation to prevent polluting the main
-    /// context with an unsaved insertion. If `save()` fails, we can cleanly discard
-    /// the child context without needing to call `rollback()` on the main context,
-    /// which would inadvertently destroy any other unrelated pending changes.
+    /// We use the main context for creation to ensure UI `@Query` properties update immediately.
+    /// If `save()` fails, we delete the pending insertion to keep the context clean
+    /// without calling `rollback()`, which would destroy other unrelated pending changes.
     func create(
         date: Date,
         durationMinutes: Int,
@@ -54,15 +53,15 @@ struct EntryStore {
             now: now
         )
         
-        let creationContext = ModelContext(context.container)
-        creationContext.autosaveEnabled = false
-        creationContext.insert(entry)
-        try creationContext.save()
-
-        guard let persistedEntry = try allEntries().first(where: { $0.id == entry.id }) else {
-            throw EntryStoreError.createdEntryUnavailable
+        context.insert(entry)
+        
+        do {
+            try context.save()
+            return entry
+        } catch {
+            context.delete(entry)
+            throw error
         }
-        return persistedEntry
     }
 
     func update(
@@ -96,24 +95,24 @@ struct EntryStore {
         }
     }
 
-    /// We use a dedicated child context for deletion because calling `context.delete()`
-    /// irrevocably mutates the in-memory object state. If the subsequent `save()` fails,
-    /// we cannot safely "undelete" the object or roll back the context without leaving
-    /// the main context and its loaded models in an inconsistent, corrupted state.
+    /// We use the main context for deletion to ensure UI `@Query` properties update immediately.
     ///
     /// If the entry is no longer present in the persistent store, this method returns
     /// silently, as the desired end state (the entry being deleted) is already met.
     func delete(_ entry: WorkEntry) throws {
         let entryID = entry.id
-        let deletionContext = ModelContext(context.container)
-        deletionContext.autosaveEnabled = false
         let descriptor = FetchDescriptor<WorkEntry>(
             predicate: #Predicate { $0.id == entryID }
         )
-        guard let persistedEntry = try deletionContext.fetch(descriptor).first else { return }
+        guard let persistedEntry = try context.fetch(descriptor).first else { return }
 
-        deletionContext.delete(persistedEntry)
-        try deletionContext.save()
+        context.delete(persistedEntry)
+        do {
+            try context.save()
+        } catch {
+            context.rollback()
+            throw error
+        }
     }
 
     func entries(in period: PayPeriod) throws -> [WorkEntry] {
