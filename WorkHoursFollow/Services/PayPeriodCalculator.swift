@@ -11,7 +11,9 @@ struct PayPeriodCalculator: Sendable {
     private var fridayIndex: Int {
         var gregorian = Calendar(identifier: .gregorian)
         gregorian.timeZone = calendar.timeZone
-        // Jan 5, 2001 was a Friday. Using 12:00 avoids daylight saving and boundary edge cases.
+        // We use a known historical Friday (Jan 5, 2001) to dynamically determine the correct weekday index.
+        // This is necessary because different calendar identifiers (like .iso8601 vs .gregorian) use different integer representations for weekdays (e.g. 5 vs 6).
+        // Using 12:00 avoids daylight saving and boundary edge cases across timezones.
         let comps = DateComponents(year: 2001, month: 1, day: 5, hour: 12)
         let knownFriday = gregorian.date(from: comps)!
         return calendar.component(.weekday, from: knownFriday)
