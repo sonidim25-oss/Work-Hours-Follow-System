@@ -255,7 +255,8 @@ final class EntryStoreTests: XCTestCase {
                 durationMinutes: 60,
                 hourlyRateCents: 2_300,
                 createdAt: originalUpdatedAt,
-                updatedAt: originalUpdatedAt
+                updatedAt: originalUpdatedAt,
+                calendar: TestCalendar.toronto
             )
         )
         try writableContext.save()
@@ -363,7 +364,8 @@ final class EntryStoreTests: XCTestCase {
             durationMinutes: 60,
             hourlyRateCents: 2_300,
             createdAt: TestCalendar.date(2026, 7, 11),
-            updatedAt: TestCalendar.date(2026, 7, 11)
+            updatedAt: TestCalendar.date(2026, 7, 11),
+            calendar: TestCalendar.toronto
         )
 
         XCTAssertFalse(try store.delete(missingEntry))

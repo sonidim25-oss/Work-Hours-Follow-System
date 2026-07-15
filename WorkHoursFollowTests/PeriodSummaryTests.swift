@@ -71,7 +71,8 @@ final class PeriodSummaryTests: XCTestCase {
             durationMinutes: durationMinutes,
             hourlyRateCents: hourlyRateCents,
             createdAt: .distantPast,
-            updatedAt: .distantPast
+            updatedAt: .distantPast,
+            calendar: TestCalendar.toronto
         )
     }
 }

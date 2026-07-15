@@ -50,7 +50,8 @@ final class EntryEditorStateTests: XCTestCase {
             durationMinutes: 612,
             hourlyRateCents: 2_550,
             createdAt: now,
-            updatedAt: now
+            updatedAt: now,
+            calendar: calendar
         )
 
         let state = EntryEditorState(entry: entry)

@@ -53,7 +53,8 @@ final class EntryValidatorTests: XCTestCase {
             durationMinutes: 60,
             hourlyRateCents: 2_300,
             createdAt: morning,
-            updatedAt: morning
+            updatedAt: morning,
+            calendar: calendar
         )
         context.insert(existing)
         try context.save()

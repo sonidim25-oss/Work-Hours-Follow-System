@@ -52,7 +52,8 @@ struct EntryStore {
             workDate: normalizedDate,
             durationMinutes: durationMinutes,
             hourlyRateCents: hourlyRateCents,
-            now: now
+            now: now,
+            calendar: calendar
         )
         
         context.insert(entry)

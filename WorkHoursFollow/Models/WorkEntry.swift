@@ -16,10 +16,11 @@ final class WorkEntry {
         durationMinutes: Int,
         hourlyRateCents: Int,
         createdAt: Date = Date(),
-        updatedAt: Date? = nil
+        updatedAt: Date? = nil,
+        calendar: Calendar
     ) {
         self.id = id
-        self.workDate = workDate
+        self.workDate = calendar.startOfDay(for: workDate)
         self.durationMinutes = durationMinutes
         self.hourlyRateCents = hourlyRateCents
         self.createdAt = createdAt
@@ -30,14 +31,16 @@ final class WorkEntry {
         workDate: Date,
         durationMinutes: Int,
         hourlyRateCents: Int,
-        now: Date
+        now: Date,
+        calendar: Calendar
     ) {
         self.init(
             workDate: workDate,
             durationMinutes: durationMinutes,
             hourlyRateCents: hourlyRateCents,
             createdAt: now,
-            updatedAt: now
+            updatedAt: now,
+            calendar: calendar
         )
     }
 
