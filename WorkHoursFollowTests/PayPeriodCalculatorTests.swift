@@ -80,4 +80,50 @@ final class PayPeriodCalculatorTests: XCTestCase {
             )
         )
     }
+    
+    func testISO8601CalendarValidation() throws {
+        var isoCalendar = Calendar(identifier: .iso8601)
+        isoCalendar.timeZone = TestCalendar.toronto.timeZone
+        let isoCalculator = PayPeriodCalculator(calendar: isoCalendar)
+        
+        // In ISO8601, Friday is index 5, not 6.
+        let anchorFriday = TestCalendar.date(2026, 7, 17)
+        XCTAssertNoThrow(
+            try isoCalculator.period(
+                containing: anchorFriday,
+                anchorPayday: anchorFriday
+            )
+        )
+        
+        let anchorThursday = TestCalendar.date(2026, 7, 16)
+        XCTAssertThrowsError(
+            try isoCalculator.period(
+                containing: anchorFriday,
+                anchorPayday: anchorThursday
+            )
+        ) {
+            XCTAssertEqual($0 as? PayPeriodCalculationError, .anchorIsNotFriday)
+        }
+    }
+
+    func testDifferentTimeZonesDoNotBreakCalculation() throws {
+        var tokyoCalendar = Calendar(identifier: .gregorian)
+        tokyoCalendar.timeZone = TimeZone(identifier: "Asia/Tokyo")!
+        let tokyoCalculator = PayPeriodCalculator(calendar: tokyoCalendar)
+        
+        // Friday in Tokyo
+        var comps = DateComponents()
+        comps.year = 2026
+        comps.month = 7
+        comps.day = 17
+        comps.hour = 12
+        let anchorFridayTokyo = tokyoCalendar.date(from: comps)!
+        
+        XCTAssertNoThrow(
+            try tokyoCalculator.period(
+                containing: anchorFridayTokyo,
+                anchorPayday: anchorFridayTokyo
+            )
+        )
+    }
 }
