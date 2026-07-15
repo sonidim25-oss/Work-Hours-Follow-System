@@ -20,15 +20,34 @@ final class EntryValidatorTests: XCTestCase {
         }
     }
 
-    func testRejectsTwoTimestampsOnTheSameCalendarDate() throws {
+    func testRejectsNonNormalizedStorage() throws {
         let context = try makeContext()
         let calendar = TestCalendar.toronto
-        let morning = try XCTUnwrap(
-            calendar.date(byAdding: .hour, value: 8, to: TestCalendar.date(2026, 7, 10))
-        )
+        let validator = EntryValidator(calendar: calendar)
         let evening = try XCTUnwrap(
             calendar.date(byAdding: .hour, value: 19, to: TestCalendar.date(2026, 7, 10))
         )
+
+        XCTAssertThrowsError(
+            try validator.validate(
+                date: evening,
+                now: TestCalendar.date(2026, 7, 11),
+                existingEntries: try context.fetch(FetchDescriptor<WorkEntry>()),
+                excluding: nil
+            )
+        ) {
+            XCTAssertEqual($0 as? EntryValidationError, .nonNormalizedDate)
+        }
+    }
+
+    func testRejectsTwoTimestampsOnTheSameCalendarDate() throws {
+        let context = try makeContext()
+        let calendar = TestCalendar.toronto
+        let date = TestCalendar.date(2026, 7, 10)
+        let morning = try XCTUnwrap(
+            calendar.date(byAdding: .hour, value: 8, to: date)
+        )
+        // Simulate an old non-normalized entry in the database
         let existing = WorkEntry(
             workDate: morning,
             durationMinutes: 60,
@@ -43,7 +62,7 @@ final class EntryValidatorTests: XCTestCase {
 
         XCTAssertThrowsError(
             try validator.validate(
-                date: evening,
+                date: date,
                 now: TestCalendar.date(2026, 7, 11),
                 existingEntries: try context.fetch(FetchDescriptor<WorkEntry>()),
                 excluding: nil

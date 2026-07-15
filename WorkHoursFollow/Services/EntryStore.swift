@@ -35,19 +35,21 @@ struct EntryStore {
         hourlyRateCents: Int,
         now: Date
     ) throws -> WorkEntry {
+        let normalizedDate = EntryValidator.normalizeStartOfDay(date: date, calendar: calendar)
+
         try validator.validate(
             durationMinutes: durationMinutes,
             hourlyRateCents: hourlyRateCents
         )
         try validator.validate(
-            date: date,
+            date: normalizedDate,
             now: now,
-            existingEntries: try entries(for: date),
+            existingEntries: try entries(for: normalizedDate),
             excluding: nil
         )
 
         let entry = WorkEntry(
-            workDate: calendar.startOfDay(for: date),
+            workDate: normalizedDate,
             durationMinutes: durationMinutes,
             hourlyRateCents: hourlyRateCents,
             now: now
@@ -70,18 +72,20 @@ struct EntryStore {
         durationMinutes: Int,
         now: Date
     ) throws {
+        let normalizedDate = EntryValidator.normalizeStartOfDay(date: date, calendar: calendar)
+
         try validator.validate(durationMinutes: durationMinutes)
         try validator.validate(
-            date: date,
+            date: normalizedDate,
             now: now,
-            existingEntries: try entries(for: date),
+            existingEntries: try entries(for: normalizedDate),
             excluding: entry.id
         )
 
         let originalDate = entry.workDate
         let originalDurationMinutes = entry.durationMinutes
         let originalUpdatedAt = entry.updatedAt
-        entry.workDate = calendar.startOfDay(for: date)
+        entry.workDate = normalizedDate
         entry.durationMinutes = durationMinutes
         entry.updatedAt = now
         do {
@@ -97,18 +101,20 @@ struct EntryStore {
 
     /// We use the main context for deletion to ensure UI `@Query` properties update immediately.
     ///
-    /// If the entry is no longer present in the persistent store, this method returns
-    /// silently, as the desired end state (the entry being deleted) is already met.
-    func delete(_ entry: WorkEntry) throws {
+    /// Returns `true` if the entry was successfully found and deleted, or `false` if it
+    /// was already absent from the persistent store.
+    @discardableResult
+    func delete(_ entry: WorkEntry) throws -> Bool {
         let entryID = entry.id
         let descriptor = FetchDescriptor<WorkEntry>(
             predicate: #Predicate { $0.id == entryID }
         )
-        guard let persistedEntry = try context.fetch(descriptor).first else { return }
+        guard let persistedEntry = try context.fetch(descriptor).first else { return false }
 
         context.delete(persistedEntry)
         do {
             try context.save()
+            return true
         } catch {
             context.rollback()
             throw error

@@ -5,6 +5,7 @@ enum EntryValidationError: Error, Equatable {
     case nonPositiveHourlyRate
     case futureDate
     case duplicateDate(UUID)
+    case nonNormalizedDate
 }
 
 struct EntryValidator {
@@ -19,19 +20,27 @@ struct EntryValidator {
         }
     }
 
+    static func normalizeStartOfDay(date: Date, calendar: Calendar) -> Date {
+        calendar.startOfDay(for: date)
+    }
+
     func validate(
         date: Date,
         now: Date,
         existingEntries: [WorkEntry],
         excluding id: UUID?
     ) throws {
-        let day = calendar.startOfDay(for: date)
-        guard day <= calendar.startOfDay(for: now) else {
+        let normalizedDate = Self.normalizeStartOfDay(date: date, calendar: calendar)
+        guard date == normalizedDate else {
+            throw EntryValidationError.nonNormalizedDate
+        }
+
+        guard normalizedDate <= calendar.startOfDay(for: now) else {
             throw EntryValidationError.futureDate
         }
 
         if let duplicate = existingEntries.first(where: {
-            $0.id != id && calendar.isDate($0.workDate, inSameDayAs: date)
+            $0.id != id && calendar.isDate($0.workDate, inSameDayAs: normalizedDate)
         }) {
             throw EntryValidationError.duplicateDate(duplicate.id)
         }
