@@ -7,6 +7,7 @@ final class AppSettings {
     var currencyCode: String
     var anchorPayday: Date
     var payPeriodLengthDays: Int
+    var targetEarningsCents: Int?
 
     /// Computes a sensible default anchor payday (the next Friday)
     /// for initial app seeding on first run.
@@ -26,12 +27,14 @@ final class AppSettings {
         defaultHourlyRateCents: Int = 2300,
         currencyCode: String = "CAD",
         anchorPayday: Date,
-        payPeriodLengthDays: Int = 14
+        payPeriodLengthDays: Int = 14,
+        targetEarningsCents: Int? = nil
     ) {
         self.defaultHourlyRateCents = defaultHourlyRateCents
         self.currencyCode = currencyCode
         self.anchorPayday = anchorPayday
         self.payPeriodLengthDays = payPeriodLengthDays
+        self.targetEarningsCents = targetEarningsCents
     }
 
     enum SettingsValidationError: LocalizedError {

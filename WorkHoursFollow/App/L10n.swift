@@ -72,6 +72,14 @@ enum L10n {
         static let failedTitle = String(localized: "settings.notice.failed.title", defaultValue: "Settings Need Attention")
         static let failedMessage = String(localized: "settings.notice.failed.message", defaultValue: "The app couldn’t save replacement settings. Safe defaults will be used for this session.")
         static let ok = String(localized: "settings.notice.ok", defaultValue: "OK")
+        
+        static let title = String(localized: "settings.title", defaultValue: "Settings")
+        static let sectionEarnings = String(localized: "settings.section.earnings", defaultValue: "Earnings")
+        static let hourlyRate = String(localized: "settings.hourly_rate", defaultValue: "Hourly Rate")
+        static let currency = String(localized: "settings.currency", defaultValue: "Currency")
+        static let sectionGoals = String(localized: "settings.section.goals", defaultValue: "Goals")
+        static let targetEarnings = String(localized: "settings.target_earnings", defaultValue: "Earnings Target (Per Cycle)")
+        static let save = String(localized: "settings.save", defaultValue: "Save Changes")
     }
 
     static let appName = String(localized: "app.name", defaultValue: "Work Hours Follow")

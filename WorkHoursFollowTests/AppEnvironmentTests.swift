@@ -171,7 +171,8 @@ final class AppEnvironmentTests: XCTestCase {
             defaultHourlyRateCents: 2_300,
             currencyCode: "CAD",
             anchorPayday: TestCalendar.date(2026, 7, 17),
-            payPeriodLengthDays: 14
+            payPeriodLengthDays: 14,
+            targetEarningsCents: nil
         )
     }
 
@@ -183,7 +184,8 @@ final class AppEnvironmentTests: XCTestCase {
             defaultHourlyRateCents: rate,
             currencyCode: currencyCode,
             anchorPayday: TestCalendar.date(2026, 7, 17),
-            payPeriodLengthDays: 14
+            payPeriodLengthDays: 14,
+            targetEarningsCents: nil
         )
     }
 }

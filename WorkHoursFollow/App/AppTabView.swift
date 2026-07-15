@@ -56,7 +56,7 @@ struct AppTabView: View {
             HistoryPlaceholderView()
                 .tabItem { Label(L10n.Tab.history, systemImage: "clock.arrow.circlepath") }
 
-            SettingsPlaceholderView()
+            SettingsView()
                 .tabItem { Label(L10n.Tab.settings, systemImage: "gearshape.fill") }
         }
         .tint(AppColors.accent)

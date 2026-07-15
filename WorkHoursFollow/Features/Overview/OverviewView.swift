@@ -21,48 +21,82 @@ struct OverviewView: View {
         self.onAdd = onAdd
     }
 
-    var body: some View {
-        ScrollView {
-            if let snapshot {
-                VStack(alignment: .leading, spacing: AppSpacing.lg) {
-                    Text(L10n.appName)
-                        .font(AppTypography.title)
-                        .fixedSize(horizontal: false, vertical: true)
+    @State private var showConfetti = false
 
-                    VStack(alignment: .leading, spacing: AppSpacing.xs) {
-                        Text(L10n.Overview.currentPeriod)
-                            .font(.headline)
-                        Text(
-                            AppFormatters.periodRange(
-                                snapshot.period,
-                                calendar: environment.calendar
+    var body: some View {
+        ZStack {
+            ScrollView {
+                if let snapshot {
+                    VStack(alignment: .leading, spacing: AppSpacing.lg) {
+                        Text(L10n.appName)
+                            .font(AppTypography.title)
+                            .fixedSize(horizontal: false, vertical: true)
+
+                        VStack(alignment: .leading, spacing: AppSpacing.xs) {
+                            Text(L10n.Overview.currentPeriod)
+                                .font(.headline)
+                            Text(
+                                AppFormatters.periodRange(
+                                    snapshot.period,
+                                    calendar: environment.calendar
+                                )
+                            )
+                                .font(.callout)
+                            Text(L10n.Overview.elapsedDays(snapshot.elapsedDays))
+                                .font(.caption)
+                                .foregroundStyle(AppColors.secondary)
+                            Text(L10n.Overview.nextPayday(AppFormatters.shortDate(snapshot.period.payday, calendar: environment.calendar)))
+                                .font(.callout)
+                                .foregroundStyle(AppColors.gold)
+                        }
+                        .accessibilityElement(children: .combine)
+
+                        SummaryCard(
+                            totalTime: AppFormatters.duration(snapshot.summary.totalMinutes),
+                            earnings: AppFormatters.currency(
+                                cents: snapshot.summary.totalEarningsCents,
+                                code: settings.currencyCode
                             )
                         )
-                            .font(.callout)
-                        Text(L10n.Overview.elapsedDays(snapshot.elapsedDays))
-                            .font(.caption)
-                            .foregroundStyle(AppColors.secondary)
-                        Text(L10n.Overview.nextPayday(AppFormatters.shortDate(snapshot.period.payday, calendar: environment.calendar)))
-                            .font(.callout)
-                            .foregroundStyle(AppColors.gold)
+                        
+                        if let targetCents = settings.targetEarningsCents, targetCents > 0 {
+                            VStack(alignment: .leading, spacing: AppSpacing.xs) {
+                                Text("Earnings Goal")
+                                    .font(.headline)
+                                
+                                let targetFormatted = AppFormatters.currency(cents: targetCents, code: settings.currencyCode)
+                                let currentFormatted = AppFormatters.currency(cents: snapshot.summary.totalEarningsCents, code: settings.currencyCode)
+                                
+                                Text("\(currentFormatted) / \(targetFormatted)")
+                                    .font(.callout)
+                                
+                                ProgressView(value: min(Double(snapshot.summary.totalEarningsCents) / Double(targetCents), 1.0))
+                                    .tint(AppColors.accent)
+                            }
+                            .padding(.top, AppSpacing.sm)
+                        }
+
+                        PrimaryButton(title: L10n.Overview.addWorkTime, systemImage: "plus", action: onAdd)
                     }
-                    .accessibilityElement(children: .combine)
-
-                    SummaryCard(
-                        totalTime: AppFormatters.duration(snapshot.summary.totalMinutes),
-                        earnings: AppFormatters.currency(
-                            cents: snapshot.summary.totalEarningsCents,
-                            code: settings.currencyCode
-                        )
-                    )
-
-                    PrimaryButton(title: L10n.Overview.addWorkTime, systemImage: "plus", action: onAdd)
+                    .padding(.horizontal, AppSpacing.lg)
+                    .padding(.vertical, AppSpacing.lg)
+                    .onChange(of: snapshot.summary.totalEarningsCents, initial: true) { _, newValue in
+                        if let target = settings.targetEarningsCents, target > 0, newValue >= target {
+                            showConfetti = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                showConfetti = false
+                            }
+                        } else {
+                            showConfetti = false
+                        }
+                    }
+                } else {
+                    periodUnavailable
                 }
-                .padding(.horizontal, AppSpacing.lg)
-                .padding(.vertical, AppSpacing.lg)
-            } else {
-                periodUnavailable
             }
+            
+            ConfettiView(isEmitting: $showConfetti)
+                .allowsHitTesting(false)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .foregroundStyle(AppColors.textLight)

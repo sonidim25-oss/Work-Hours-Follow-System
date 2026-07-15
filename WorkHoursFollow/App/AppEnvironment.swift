@@ -5,17 +5,20 @@ struct EffectiveAppSettings: Equatable, Sendable {
     let currencyCode: String
     let anchorPayday: Date
     let payPeriodLengthDays: Int
+    let targetEarningsCents: Int?
 
     init(
         defaultHourlyRateCents: Int,
         currencyCode: String,
         anchorPayday: Date,
-        payPeriodLengthDays: Int
+        payPeriodLengthDays: Int,
+        targetEarningsCents: Int?
     ) {
         self.defaultHourlyRateCents = defaultHourlyRateCents
         self.currencyCode = currencyCode
         self.anchorPayday = anchorPayday
         self.payPeriodLengthDays = payPeriodLengthDays
+        self.targetEarningsCents = targetEarningsCents
     }
 
     init(_ settings: AppSettings) {
@@ -23,7 +26,8 @@ struct EffectiveAppSettings: Equatable, Sendable {
             defaultHourlyRateCents: settings.defaultHourlyRateCents,
             currencyCode: settings.currencyCode,
             anchorPayday: settings.anchorPayday,
-            payPeriodLengthDays: settings.payPeriodLengthDays
+            payPeriodLengthDays: settings.payPeriodLengthDays,
+            targetEarningsCents: settings.targetEarningsCents
         )
     }
 }
