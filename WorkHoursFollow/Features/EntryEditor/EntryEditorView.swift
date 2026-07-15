@@ -31,11 +31,11 @@ struct EntryEditorState {
         try? DurationService.totalMinutes(hours: hours, minutes: minutes)
     }
 
-    var earningsCents: Int {
-        (try? EarningsCalculator.earningsCents(
+    var earningsCents: Int? {
+        try? EarningsCalculator.earningsCents(
             durationMinutes: durationMinutes ?? 0,
             hourlyRateCents: hourlyRateCents
-        )) ?? 0
+        )
     }
 
     func canSave(now: Date, calendar: Calendar) -> Bool {

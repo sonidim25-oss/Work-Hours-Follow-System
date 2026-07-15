@@ -70,7 +70,7 @@ struct OverviewView: View {
                                 Text("\(currentFormatted) / \(targetFormatted)")
                                     .font(.callout)
                                 
-                                ProgressView(value: min(Double(snapshot.summary.totalEarningsCents) / Double(targetCents), 1.0))
+                                ProgressView(value: min(Double(snapshot.summary.totalEarningsCents ?? 0) / Double(targetCents), 1.0))
                                     .tint(AppColors.accent)
                             }
                             .padding(.top, AppSpacing.sm)
@@ -81,7 +81,7 @@ struct OverviewView: View {
                     .padding(.horizontal, AppSpacing.lg)
                     .padding(.vertical, AppSpacing.lg)
                     .onChange(of: snapshot.summary.totalEarningsCents, initial: true) { _, newValue in
-                        if let target = settings.targetEarningsCents, target > 0, newValue >= target {
+                        if let target = settings.targetEarningsCents, target > 0, (newValue ?? 0) >= target {
                             showConfetti = true
                             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                                 showConfetti = false

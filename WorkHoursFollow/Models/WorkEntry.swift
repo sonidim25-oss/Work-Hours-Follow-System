@@ -44,10 +44,10 @@ final class WorkEntry {
         )
     }
 
-    var earningsCents: Int {
-        (try? EarningsCalculator.earningsCents(
+    var earningsCents: Int? {
+        try? EarningsCalculator.earningsCents(
             durationMinutes: durationMinutes,
             hourlyRateCents: hourlyRateCents
-        )) ?? 0
+        )
     }
 }

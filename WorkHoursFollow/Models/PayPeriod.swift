@@ -13,11 +13,21 @@ struct PayPeriod: Equatable, Sendable {
 
 struct PeriodSummary {
     let totalMinutes: Int
-    let totalEarningsCents: Int
+    let totalEarningsCents: Int?
 
     init(entries: [WorkEntry]) {
         totalMinutes = entries.reduce(0) { $0 + $1.durationMinutes }
-        totalEarningsCents = entries.reduce(0) { $0 + $1.earningsCents }
+        
+        var totalCents: Int? = 0
+        for entry in entries {
+            if let current = totalCents, let cents = entry.earningsCents {
+                let (sum, overflow) = current.addingReportingOverflow(cents)
+                totalCents = overflow ? nil : sum
+            } else {
+                totalCents = nil
+            }
+        }
+        totalEarningsCents = totalCents
     }
 }
 

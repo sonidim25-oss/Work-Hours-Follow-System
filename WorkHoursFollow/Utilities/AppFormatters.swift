@@ -6,10 +6,11 @@ enum AppFormatters {
     }
 
     static func currency(
-        cents: Int,
+        cents: Int?,
         code: String = "CAD",
         locale: Locale = Locale(identifier: "en_CA")
     ) -> String {
+        guard let cents else { return "--" }
         let amount = Decimal(cents) / Decimal(100)
         return amount.formatted(.currency(code: code).locale(locale))
     }
