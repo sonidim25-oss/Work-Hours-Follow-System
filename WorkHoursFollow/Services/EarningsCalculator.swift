@@ -1,7 +1,7 @@
 enum EarningsCalculator {
-    enum RoundingRule {
+    enum RoundingStrategy {
         /// Half-up rounding for minute-to-hour conversions (cents).
-        static func apply(quotient: Int64, remainder: Int64, divisor: Int64 = 60) -> Int64 {
+        static func nearestCent(quotient: Int64, remainder: Int64, divisor: Int64 = 60) -> Int64 {
             let threshold = (divisor + 1) / 2 // 30 for 60
             return quotient + (remainder >= threshold ? 1 : 0)
         }
@@ -27,7 +27,7 @@ enum EarningsCalculator {
         
         let quotient = numerator / 60
         let remainder = numerator % 60
-        let total = RoundingRule.apply(quotient: quotient, remainder: remainder)
+        let total = RoundingStrategy.nearestCent(quotient: quotient, remainder: remainder)
         
         guard total <= Int64(Int.max) else {
             throw CalculationError.overflow
