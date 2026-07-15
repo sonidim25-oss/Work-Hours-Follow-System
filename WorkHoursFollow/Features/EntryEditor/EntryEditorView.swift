@@ -45,10 +45,10 @@ struct EntryEditorState {
 
     func validationMessage(now: Date, calendar: Calendar) -> String? {
         guard calendar.startOfDay(for: date) <= calendar.startOfDay(for: now) else {
-            return "Choose today or an earlier date."
+            return L10n.Editor.validationDate
         }
         guard durationMinutes != nil else {
-            return "Enter a work duration greater than zero."
+            return L10n.Editor.validationDuration
         }
         return nil
     }
@@ -147,15 +147,15 @@ struct EntryEditorView: View {
         ) { alert in
             switch alert {
             case .duplicate(let id):
-                Button("Edit Existing Entry") {
+                Button(L10n.Editor.duplicateEdit) {
                     editExistingEntry(id: id)
                 }
-                Button("Replace", role: .destructive) {
+                Button(L10n.Editor.duplicateReplace, role: .destructive) {
                     replaceExistingEntry(id: id)
                 }
-                Button("Cancel", role: .cancel) {}
+                Button(L10n.Editor.duplicateCancel, role: .cancel) {}
             case .persistence, .validation:
-                Button("OK", role: .cancel) {}
+                Button(L10n.Editor.persistenceOk, role: .cancel) {}
             }
         } message: { alert in
             Text(alert.message)
@@ -163,13 +163,13 @@ struct EntryEditorView: View {
     }
 
     private var editorTitle: String {
-        editingEntry == nil ? "Add Work Time" : "Edit Work Time"
+        editingEntry == nil ? L10n.Editor.titleAdd : L10n.Editor.titleEdit
     }
 
     private var editorHeader: some View {
         VStack(spacing: dynamicTypeSize.isAccessibilitySize ? AppSpacing.xs : 0) {
             HStack(spacing: AppSpacing.xs) {
-                headerButton("Cancel", identifier: "entry-editor-cancel") {
+                headerButton(L10n.Editor.cancel, identifier: "entry-editor-cancel") {
                     dismiss()
                 }
 
@@ -181,7 +181,7 @@ struct EntryEditorView: View {
 
                 Spacer(minLength: AppSpacing.xs)
 
-                headerButton("Save", identifier: "entry-editor-save", action: save)
+                headerButton(L10n.Editor.save, identifier: "entry-editor-save", action: save)
                     .fontWeight(.semibold)
                     .disabled(
                         !state.canSave(
@@ -225,10 +225,10 @@ struct EntryEditorView: View {
 
     private var dateSection: some View {
         VStack(alignment: .leading, spacing: AppSpacing.sm) {
-            sectionTitle("Date")
+            sectionTitle(L10n.Editor.date)
 
             DatePicker(
-                "Work date",
+                LocalizedStringKey(L10n.Editor.dateLabel),
                 selection: $state.date,
                 in: ...environment.now(),
                 displayedComponents: .date
@@ -238,13 +238,13 @@ struct EntryEditorView: View {
             .padding(AppSpacing.md)
             .foregroundStyle(AppColors.textLight)
             .background(panelBackground)
-            .accessibilityHint("Choose today or an earlier work date")
+            .accessibilityHint(L10n.Editor.dateHint)
         }
     }
 
     private var durationSection: some View {
         VStack(alignment: .leading, spacing: AppSpacing.sm) {
-            sectionTitle("Total Time Worked")
+            sectionTitle(L10n.Editor.duration)
 
             durationPickers
             .padding(.horizontal, AppSpacing.sm)
@@ -269,7 +269,7 @@ struct EntryEditorView: View {
 
     private var hoursPicker: some View {
         durationPicker(
-            title: "Hours",
+            title: L10n.Editor.durationHours,
             values: 0...24,
             selection: $state.hours,
             display: { String($0) }
@@ -278,7 +278,7 @@ struct EntryEditorView: View {
 
     private var minutesPicker: some View {
         durationPicker(
-            title: "Minutes",
+            title: L10n.Editor.durationMinutes,
             values: 0...59,
             selection: $state.minutes,
             display: { String(format: "%02d", $0) }
@@ -288,12 +288,12 @@ struct EntryEditorView: View {
     private var earningsSection: some View {
         VStack(alignment: .leading, spacing: AppSpacing.md) {
             earningsRow(
-                label: "Rate",
-                value: "\(AppFormatters.currency(cents: state.hourlyRateCents, code: currencyCode)) / hour"
+                label: L10n.Editor.earningsRate,
+                value: L10n.Editor.earningsRateFormat(AppFormatters.currency(cents: state.hourlyRateCents, code: currencyCode))
             )
             Divider().overlay(AppColors.secondary.opacity(0.5))
             earningsRow(
-                label: "Estimated earned",
+                label: L10n.Editor.earningsEstimated,
                 value: AppFormatters.currency(cents: state.earningsCents, code: currencyCode)
             )
         }
@@ -380,10 +380,10 @@ struct EntryEditorView: View {
         } catch EntryValidationError.duplicateDate(let id) {
             presentedAlert = .duplicate(id)
         } catch EntryValidationError.nonPositiveDuration {
-            presentedAlert = .validation("Enter a work duration greater than zero.")
+            presentedAlert = .validation(L10n.Editor.validationDuration)
         } catch EntryValidationError.nonPositiveHourlyRate {
             presentedAlert = .validation(
-                "The hourly rate must be greater than zero. Check Settings and try again."
+                L10n.Editor.validationRate
             )
         } catch {
             presentedAlert = .persistence
@@ -440,16 +440,16 @@ private enum EditorAlert: Identifiable {
 
     var title: String {
         switch self {
-        case .duplicate: return "Entry Already Exists"
-        case .persistence: return "Couldn’t Save Work Time"
-        case .validation: return "Check Work Time"
+        case .duplicate: return L10n.Editor.duplicateTitle
+        case .persistence: return L10n.Editor.persistenceTitle
+        case .validation: return L10n.Editor.validationTitle
         }
     }
 
     var message: String {
         switch self {
-        case .duplicate: return "There is already work time recorded for this date."
-        case .persistence: return "Your changes are still here. Please try saving again."
+        case .duplicate: return L10n.Editor.duplicateMessage
+        case .persistence: return L10n.Editor.persistenceMessage
         case .validation(let msg): return msg
         }
     }

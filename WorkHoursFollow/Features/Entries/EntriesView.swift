@@ -34,14 +34,14 @@ struct EntriesView: View {
                 header(snapshot.period)
                 entriesList(snapshot.entries)
             } else {
-                Text("Entries")
+                Text(L10n.Entries.title)
                     .font(AppTypography.title)
                     .padding(.horizontal, AppSpacing.lg)
 
                 ContentUnavailableView(
-                    "Current Period Unavailable",
+                    L10n.Overview.unavailableTitle,
                     systemImage: "exclamationmark.calendar",
-                    description: Text("The current pay period couldn’t be calculated.")
+                    description: Text(L10n.Overview.unavailableDescription)
                 )
             }
         }
@@ -50,19 +50,19 @@ struct EntriesView: View {
         .foregroundStyle(AppColors.textLight)
         .background(AppColors.background.ignoresSafeArea())
         .confirmationDialog(
-            "Delete Work Entry?",
+            L10n.Entries.deleteDialogTitle,
             isPresented: deletionDialogIsPresented,
             presenting: pendingDeletion
         ) { entry in
-            Button("Delete", role: .destructive) { delete(entry) }
-            Button("Cancel", role: .cancel) {}
+            Button(L10n.Entries.deleteDialogDelete, role: .destructive) { delete(entry) }
+            Button(L10n.Entries.deleteDialogCancel, role: .cancel) {}
         } message: { _ in
-            Text("This work entry will be permanently removed.")
+            Text(L10n.Entries.deleteDialogMessage)
         }
-        .alert("Couldn’t Delete Work Entry", isPresented: $showsDeleteError) {
-            Button("OK", role: .cancel) {}
+        .alert(L10n.Entries.deleteErrorTitle, isPresented: $showsDeleteError) {
+            Button(L10n.Entries.deleteErrorOk, role: .cancel) {}
         } message: {
-            Text("The entry is still here. Please try deleting it again.")
+            Text(L10n.Entries.deleteErrorMessage)
         }
     }
 
@@ -84,10 +84,10 @@ struct EntriesView: View {
 
     private func header(_ period: PayPeriod) -> some View {
         VStack(alignment: .leading, spacing: AppSpacing.xs) {
-            Text("Entries")
+            Text(L10n.Entries.title)
                 .font(AppTypography.title)
                 .fixedSize(horizontal: false, vertical: true)
-            Text("Current Pay Period")
+            Text(L10n.Entries.currentPeriod)
                 .font(.headline)
                 .foregroundStyle(AppColors.gold)
             Text(AppFormatters.periodRange(period, calendar: environment.calendar))
@@ -105,7 +105,7 @@ struct EntriesView: View {
                         .font(.title)
                         .foregroundStyle(AppColors.gold)
                         .accessibilityHidden(true)
-                    Text("No work time recorded for this period.")
+                    Text(L10n.Entries.noWorkTime)
                         .font(.body)
                         .multilineTextAlignment(.center)
                 }
@@ -124,7 +124,7 @@ struct EntriesView: View {
                         onEdit(entry)
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        Button("Delete", systemImage: "trash", role: .destructive) {
+                        Button(L10n.Entries.deleteDialogDelete, systemImage: "trash", role: .destructive) {
                             pendingDeletion = entry
                         }
                     }
@@ -142,7 +142,7 @@ struct EntriesView: View {
             }
 
             Button(action: onAdd) {
-                Label("Add Time for a Day", systemImage: "plus")
+                Label(L10n.Entries.addTime, systemImage: "plus")
                     .font(.body.weight(.semibold))
                     .frame(maxWidth: .infinity, minHeight: 52)
                     .foregroundStyle(AppColors.textDark)
@@ -150,7 +150,7 @@ struct EntriesView: View {
                     .clipShape(RoundedRectangle(cornerRadius: AppRadius.medium))
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Add Time for a Day")
+            .accessibilityLabel(L10n.Entries.addTime)
             .listRowInsets(
                 EdgeInsets(
                     top: AppSpacing.sm,

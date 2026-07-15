@@ -6,10 +6,10 @@ enum AppTab: Hashable, CaseIterable {
 
     var title: String {
         switch self {
-        case .overview: "Overview"
-        case .entries: "Entries"
-        case .history: "History"
-        case .settings: "Settings"
+        case .overview: L10n.Tab.overview
+        case .entries: L10n.Tab.entries
+        case .history: L10n.Tab.history
+        case .settings: L10n.Tab.settings
         }
     }
 }
@@ -42,7 +42,7 @@ struct AppTabView: View {
             ) {
                 editorRoute = .create
             }
-            .tabItem { Label("Overview", systemImage: "house.fill") }
+            .tabItem { Label(L10n.Tab.overview, systemImage: "house.fill") }
 
             EntriesView(
                 environment: environment,
@@ -51,13 +51,13 @@ struct AppTabView: View {
                 onAdd: { editorRoute = .create },
                 onEdit: { editorRoute = .edit($0) }
             )
-            .tabItem { Label("Entries", systemImage: "list.bullet.rectangle") }
+            .tabItem { Label(L10n.Tab.entries, systemImage: "list.bullet.rectangle") }
 
             HistoryPlaceholderView()
-                .tabItem { Label("History", systemImage: "clock.arrow.circlepath") }
+                .tabItem { Label(L10n.Tab.history, systemImage: "clock.arrow.circlepath") }
 
             SettingsPlaceholderView()
-                .tabItem { Label("Settings", systemImage: "gearshape.fill") }
+                .tabItem { Label(L10n.Tab.settings, systemImage: "gearshape.fill") }
         }
         .tint(AppColors.accent)
         .toolbarBackground(AppColors.backgroundElevated, for: .tabBar)
@@ -83,7 +83,7 @@ struct AppTabView: View {
             Alert(
                 title: Text(notice.title),
                 message: Text(notice.message),
-                dismissButton: .default(Text("OK"))
+                dismissButton: .default(Text(L10n.Settings.ok))
             )
         }
         .overlay(alignment: .topLeading) {
@@ -157,17 +157,15 @@ private enum SettingsNotice: String, Identifiable {
 
     var title: String {
         switch self {
-        case .restored: "Safe Defaults Restored"
-        case .restoreFailed: "Settings Need Attention"
+        case .restored: L10n.Settings.restoredTitle
+        case .restoreFailed: L10n.Settings.failedTitle
         }
     }
 
     var message: String {
         switch self {
-        case .restored:
-            "Missing or invalid settings were replaced with the documented $23 CAD biweekly defaults."
-        case .restoreFailed:
-            "The app couldn’t save replacement settings. Safe defaults will be used for this session."
+        case .restored: L10n.Settings.restoredMessage
+        case .restoreFailed: L10n.Settings.failedMessage
         }
     }
 }

@@ -42,6 +42,8 @@
 		100000000000000000000022 /* HistoryPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000024 /* HistoryPlaceholderView.swift */; };
 		100000000000000000000023 /* SettingsPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000025 /* SettingsPlaceholderView.swift */; };
 		100000000000000000000024 /* FunctionalVerticalSliceUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000026 /* FunctionalVerticalSliceUITests.swift */; };
+		1EB2469852E8FB7F05AB8FE7 /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 0EC36F07F56654BE9E5D94CF /* en.lproj */; };
+		C5046F4D6CAD942068B5225A /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72A97F7DEBC8230FD945780 /* L10n.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +64,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0EC36F07F56654BE9E5D94CF /* en.lproj */ = {isa = PBXFileReference; includeInIndex = 1; path = en.lproj; sourceTree = "<group>"; };
 		200000000000000000000001 /* WorkHoursFollowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkHoursFollowApp.swift; sourceTree = "<group>"; };
 		200000000000000000000002 /* AppTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabView.swift; sourceTree = "<group>"; };
 		200000000000000000000004 /* WorkHoursFollow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorkHoursFollow.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,6 +103,7 @@
 		200000000000000000000025 /* SettingsPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPlaceholderView.swift; sourceTree = "<group>"; };
 		200000000000000000000026 /* FunctionalVerticalSliceUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionalVerticalSliceUITests.swift; sourceTree = "<group>"; };
 		200000000000000000000027 /* WorkHoursFollowUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WorkHoursFollowUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C72A97F7DEBC8230FD945780 /* L10n.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +151,7 @@
 				700000000000000000000009 /* DesignSystem */,
 				70000000000000000000000A /* Components */,
 				70000000000000000000000B /* Features */,
+				88B7A94373C248C4A12016AC /* Resources */,
 			);
 			path = WorkHoursFollow;
 			sourceTree = "<group>";
@@ -157,6 +162,7 @@
 				200000000000000000000001 /* WorkHoursFollowApp.swift */,
 				200000000000000000000002 /* AppTabView.swift */,
 				200000000000000000000011 /* AppEnvironment.swift */,
+				C72A97F7DEBC8230FD945780 /* L10n.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -299,6 +305,14 @@
 			path = WorkHoursFollowUITests;
 			sourceTree = "<group>";
 		};
+		88B7A94373C248C4A12016AC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0EC36F07F56654BE9E5D94CF /* en.lproj */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -403,6 +417,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1EB2469852E8FB7F05AB8FE7 /* en.lproj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,6 +466,7 @@
 				100000000000000000000021 /* EntriesView.swift in Sources */,
 				100000000000000000000022 /* HistoryPlaceholderView.swift in Sources */,
 				100000000000000000000023 /* SettingsPlaceholderView.swift in Sources */,
+				C5046F4D6CAD942068B5225A /* L10n.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

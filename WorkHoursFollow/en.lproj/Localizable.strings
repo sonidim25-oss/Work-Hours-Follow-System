@@ -1,0 +1,57 @@
+"tab.overview" = "Overview";
+"tab.entries" = "Entries";
+"tab.history" = "History";
+"tab.settings" = "Settings";
+
+"app.name" = "Work Hours Follow";
+"overview.current_period" = "Current Pay Period";
+"overview.elapsed_days" = "%lld of 14 days";
+"overview.next_payday" = "Next payday: %@";
+"overview.add_work_time" = "Add Work Time";
+"overview.unavailable.title" = "Current Period Unavailable";
+"overview.unavailable.description" = "The current pay period couldn’t be calculated.";
+
+"entries.title" = "Entries";
+"entries.current_period" = "Current Pay Period";
+"entries.no_work_time" = "No work time recorded for this period.";
+"entries.add_time" = "Add Time for a Day";
+"entries.delete_dialog.title" = "Delete Work Entry?";
+"entries.delete_dialog.message" = "This work entry will be permanently removed.";
+"entries.delete_dialog.delete" = "Delete";
+"entries.delete_dialog.cancel" = "Cancel";
+"entries.delete_error.title" = "Couldn’t Delete Work Entry";
+"entries.delete_error.message" = "The entry is still here. Please try deleting it again.";
+"entries.delete_error.ok" = "OK";
+
+"editor.title.add" = "Add Work Time";
+"editor.title.edit" = "Edit Work Time";
+"editor.cancel" = "Cancel";
+"editor.save" = "Save";
+"editor.date" = "Date";
+"editor.date.label" = "Work date";
+"editor.date.hint" = "Choose today or an earlier work date";
+"editor.duration" = "Total Time Worked";
+"editor.duration.hours" = "Hours";
+"editor.duration.minutes" = "Minutes";
+"editor.earnings.rate" = "Rate";
+"editor.earnings.rate_format" = "%@ / hour";
+"editor.earnings.estimated" = "Estimated earned";
+"editor.validation.date" = "Choose today or an earlier date.";
+"editor.validation.duration" = "Enter a work duration greater than zero.";
+"editor.validation.rate" = "The hourly rate must be greater than zero. Check Settings and try again.";
+"editor.alert.duplicate.title" = "Entry Already Exists";
+"editor.alert.duplicate.message" = "There is already work time recorded for this date.";
+"editor.alert.duplicate.edit" = "Edit Existing Entry";
+"editor.alert.duplicate.replace" = "Replace";
+"editor.alert.duplicate.cancel" = "Cancel";
+"editor.alert.persistence.title" = "Couldn’t Save Work Time";
+"editor.alert.persistence.message" = "Your changes are still here. Please try saving again.";
+"editor.alert.persistence.ok" = "OK";
+"editor.alert.validation.title" = "Check Work Time";
+"editor.alert.validation.ok" = "OK";
+
+"settings.notice.restored.title" = "Safe Defaults Restored";
+"settings.notice.restored.message" = "Missing or invalid settings were replaced with the documented $23 CAD biweekly defaults.";
+"settings.notice.failed.title" = "Settings Need Attention";
+"settings.notice.failed.message" = "The app couldn’t save replacement settings. Safe defaults will be used for this session.";
+"settings.notice.ok" = "OK";

@@ -25,12 +25,12 @@ struct OverviewView: View {
         ScrollView {
             if let snapshot {
                 VStack(alignment: .leading, spacing: AppSpacing.lg) {
-                    Text("Work Hours Follow")
+                    Text(L10n.appName)
                         .font(AppTypography.title)
                         .fixedSize(horizontal: false, vertical: true)
 
                     VStack(alignment: .leading, spacing: AppSpacing.xs) {
-                        Text("Current Pay Period")
+                        Text(L10n.Overview.currentPeriod)
                             .font(.headline)
                         Text(
                             AppFormatters.periodRange(
@@ -39,12 +39,10 @@ struct OverviewView: View {
                             )
                         )
                             .font(.callout)
-                        Text("\(snapshot.elapsedDays) of 14 days")
+                        Text(L10n.Overview.elapsedDays(snapshot.elapsedDays))
                             .font(.caption)
                             .foregroundStyle(AppColors.secondary)
-                        Text(
-                            "Next payday: \(AppFormatters.shortDate(snapshot.period.payday, calendar: environment.calendar))"
-                        )
+                        Text(L10n.Overview.nextPayday(AppFormatters.shortDate(snapshot.period.payday, calendar: environment.calendar)))
                             .font(.callout)
                             .foregroundStyle(AppColors.gold)
                     }
@@ -58,7 +56,7 @@ struct OverviewView: View {
                         )
                     )
 
-                    PrimaryButton(title: "Add Work Time", systemImage: "plus", action: onAdd)
+                    PrimaryButton(title: L10n.Overview.addWorkTime, systemImage: "plus", action: onAdd)
                 }
                 .padding(.horizontal, AppSpacing.lg)
                 .padding(.vertical, AppSpacing.lg)
@@ -82,9 +80,9 @@ struct OverviewView: View {
 
     private var periodUnavailable: some View {
         ContentUnavailableView(
-            "Current Period Unavailable",
+            L10n.Overview.unavailableTitle,
             systemImage: "exclamationmark.calendar",
-            description: Text("The current pay period couldn’t be calculated.")
+            description: Text(L10n.Overview.unavailableDescription)
         )
         .foregroundStyle(AppColors.textLight)
         .padding(AppSpacing.lg)
